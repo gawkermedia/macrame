@@ -47,7 +47,7 @@ object Build extends Build {
             "org.scalaz" %% "scalaz-core" % "[7.2,7.3[" % Provided,
             compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" % "test" cross CrossVersion.full),
             "org.scalatest" %% "scalatest" % "3.0.0" % "test",
-            "org.scalacheck" %% "scalacheck" % "1.12.5" % "test")))
+            "org.scalacheck" %% "scalacheck" % "1.13.4" % "test")))
 
    lazy val pomStuff = {
      <url>https://github.com/ChrisNeveu/macrame</url>
