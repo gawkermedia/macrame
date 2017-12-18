@@ -1,8 +1,8 @@
 package macrame
 
-import scala.language.implicitConversions
-
 import org.scalatest.FunSuite
+
+import scala.language.implicitConversions
 
 class DelegateTest extends FunSuite {
 
