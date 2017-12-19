@@ -2,7 +2,7 @@ package macrame
 
 import org.scalatest.FunSuite
 
-import scala.math.Ordering
+import scala.language.implicitConversions
 
 class DelegateTest extends FunSuite {
 
