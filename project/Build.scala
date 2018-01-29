@@ -10,6 +10,13 @@ import com.typesafe.sbt.pgp.PgpKeys
 
 object Build extends Build {
 
+   lazy val root: Project = Project(
+      "root",
+      file("."),
+      settings = commonSettings ++ Seq(
+        publishArtifact := false
+   )).aggregate(macrame, macramePlay, macrameScalaz)
+
    lazy val macrame: Project = Project(
       "macrame",
       file("macrame"),
