@@ -6,7 +6,7 @@ import scalariform.formatter.preferences._
 import com.typesafe.sbt.SbtScalariform._
 import ScalariformKeys._
 
-import com.typesafe.sbt.pgp.PgpSettings.useGpg
+import com.typesafe.sbt.pgp.PgpKeys
 
 object Build extends Build {
 
@@ -81,7 +81,12 @@ object Build extends Build {
          "-language:higherKinds",
          "-language:postfixOps"
       ),
-      useGpg := true,
+      // Publishing
+      PgpKeys.useGpg := true,
+      credentials += Credentials(Path.userHome / ".ivy2" / ".sonatype"),
+      PgpKeys.pgpSecretRing in Global := file(System.getProperty("SEC_RING", "")),
+      PgpKeys.pgpPublicRing in Global := file(System.getProperty("PUB_RING", "")),
+      PgpKeys.pgpPassphrase in Global := Some(Array(System.getProperty("PGP_PASS", ""): _*)),
       pomExtra := pomStuff,
       ScalariformKeys.preferences := ScalariformKeys.preferences.value
          .setPreference(IndentSpaces, 3)
