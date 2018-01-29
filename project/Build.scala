@@ -32,10 +32,10 @@ object Build extends Build {
       settings = commonSettings ++ Seq(
          version := "1.1.2-play-2.6.x",
          libraryDependencies ++= Seq(
-            "com.kinja" %% "macrame" % "[1.0,2.0[" % Provided,
             "com.typesafe.play" %% "play" % "[2.6,2.7[" % Provided,
             compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" % "test" cross CrossVersion.full),
-            "org.scalatest" %% "scalatest" % "3.0.0" % "test")))
+            "org.scalatest" %% "scalatest" % "3.0.0" % "test"))
+      ).dependsOn(macrame)
 
    lazy val macrameScalaz: Project = Project(
       "macrame-scalaz",
@@ -43,11 +43,11 @@ object Build extends Build {
       settings = commonSettings ++ Seq(
          version := "1.0.2-scalaz-7.2.x",
          libraryDependencies ++= Seq(
-            "com.kinja" %% "macrame" % "[1.0,2.0[" % Provided,
             "org.scalaz" %% "scalaz-core" % "[7.2,7.3[" % Provided,
             compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" % "test" cross CrossVersion.full),
             "org.scalatest" %% "scalatest" % "3.0.0" % "test",
-            "org.scalacheck" %% "scalacheck" % "1.13.4" % "test")))
+            "org.scalacheck" %% "scalacheck" % "1.13.4" % "test"))
+   ).dependsOn(macrame)
 
    lazy val pomStuff = {
      <url>https://github.com/ChrisNeveu/macrame</url>
