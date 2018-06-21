@@ -80,7 +80,7 @@ object Build extends Build {
    lazy val commonSettings = Defaults.coreDefaultSettings ++ scalariformSettings ++ Seq(
       organization := "com.kinja",
       scalaVersion := "2.11.8",
-      crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0"),
+      crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.6"),
       scalacOptions ++= Seq(
          "-unchecked",
          "-deprecation",
