@@ -21,7 +21,7 @@ object Build extends Build {
       "macrame",
       file("macrame"),
       settings = commonSettings ++ Seq(
-         version := "1.2.7",
+         version := "1.2.8",
          libraryDependencies ++= Seq(
             "org.scala-lang" % "scala-compiler" % scalaVersion.value,
             compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
@@ -37,9 +37,9 @@ object Build extends Build {
       "macrame-play",
       file("macrame-play"),
       settings = commonSettings ++ Seq(
-         version := "1.1.2-play-2.6.x",
+         version := "1.1.2-play-2.7.x",
          libraryDependencies ++= Seq(
-            "com.typesafe.play" %% "play" % "[2.6,2.7[" % Provided,
+            "com.typesafe.play" %% "play" % "[2.7,2.8[" % Provided,
             compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" % "test" cross CrossVersion.full),
             "org.scalatest" %% "scalatest" % "3.0.0" % "test"))
       ).dependsOn(macrame)
@@ -79,8 +79,8 @@ object Build extends Build {
 
    lazy val commonSettings = Defaults.coreDefaultSettings ++ scalariformSettings ++ Seq(
       organization := "com.kinja",
-      scalaVersion := "2.11.8",
-      crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.6"),
+      scalaVersion := "2.12.8",
+      crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.8"),
       scalacOptions ++= Seq(
          "-unchecked",
          "-deprecation",
