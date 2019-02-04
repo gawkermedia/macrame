@@ -36,7 +36,7 @@ object Color extends EnumApi[Color] {
 ### Using EnumApi
 In order to reduce boilerplate, the `@enum` macro defines a number of convenient functions on your enumeration type. Auto-generated functions are great but they often increase your API in undesired ways, exposing conversions to/from `String` that would be better hidden inside more principled conversions.
 
-To resolve this tension, `@enum` provides the *implementations* for automatically generated functions as `protected` members of the companion object, leaving you to expose these functions or use them to implement other functions as you wish. These functions can be found in [EnumApi](http://chrisneveu.github.io/macrame/doc/macrame/1.2.2/#macrame.EnumApi) (select "Visibility: All").
+To resolve this tension, `@enum` provides the *implementations* for automatically generated functions as `protected` members of the companion object, leaving you to expose these functions or use them to implement other functions as you wish. These functions can be found in [EnumApi](http://claireneveu.github.io/macrame/doc/macrame/1.2.2/#macrame.EnumApi) (select "Visibility: All").
 ```scala
 @enum class Color {
    Red
@@ -51,7 +51,7 @@ object Color {
 }
 ```
 
-Macramé also provides a number of [traits](http://chrisneveu.github.io/macrame/doc/macrame/1.2.2/#macrame.enums.package) that expose the most commonly used functionality. The [Macramé-Play](https://github.com/ChrisNeveu/macrame/tree/master/macrame-play) and [Macramé-Scalaz](https://github.com/ChrisNeveu/macrame/tree/master/macrame-scalaz) libraries leverage this approach to provide integration with Play Framework and Scalaz respectively.
+Macramé also provides a number of [traits](http://claireneveu.github.io/macrame/doc/macrame/1.2.2/#macrame.enums.package) that expose the most commonly used functionality. The [Macramé-Play](https://github.com/ClaireNeveu/macrame/tree/master/macrame-play) and [Macramé-Scalaz](https://github.com/ClaireNeveu/macrame/tree/master/macrame-scalaz) libraries leverage this approach to provide integration with Play Framework and Scalaz respectively.
 ```scala
 @enum class Color {
    Red
@@ -134,7 +134,7 @@ object Color {
 ## Debugging
 The `trace` macro can be very useful when figuring out why a macro won't work. It outputs to the console during compiliation. The format looks like this:
 ```console
-[info] /home/chris/Programming/scala/macrame/README.scala:70: trace output
+[info] /home/claire/Programming/scala/macrame/README.scala:70: trace output
 [info]    immutable.this.List.apply[Color](this.Red, this.Blue, this.Yellow)
 [info] for position:
 [info]       val values : List[Color] = trace(members[Color](this))

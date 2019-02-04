@@ -8,7 +8,7 @@ libraryDependencies += "com.kinja" %% "macrame-play" % "1.1.0-play-2.6.x"
 ```
 
 ## API Documentation
-Full API documentation is available [here](http://chrisneveu.github.io/macrame/doc/macrame-play/1.1.0-play-2.5.x/#package).
+Full API documentation is available [here](http://claireneveu.github.io/macrame/doc/macrame-play/1.1.0-play-2.5.x/#package).
 
 ### Usage
 This example shows how to make a `Format` instance for a `Color` enumeration:
