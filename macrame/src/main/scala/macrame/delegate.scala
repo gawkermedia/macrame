@@ -5,7 +5,7 @@ import scala.language.experimental.macros
 import scala.annotation.StaticAnnotation
 
 class delegate extends StaticAnnotation {
-   def macroTransform(annottees : Any*) = macro delegate.impl
+   def macroTransform(annottees : Any*) : Any = macro delegate.impl
 }
 
 object delegate {
