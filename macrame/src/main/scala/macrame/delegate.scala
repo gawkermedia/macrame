@@ -5,7 +5,7 @@ import scala.language.experimental.macros
 import scala.annotation.StaticAnnotation
 
 class delegate extends StaticAnnotation {
-   def macroTransform(annottees : Any*) = macro delegate.impl
+   def macroTransform(annottees : Any*) : Any = macro delegate.impl
 }
 
 object delegate {
@@ -139,7 +139,7 @@ object delegate {
    }
 
    def parameterImpl(c : Context)(
-      delegate : c.Tree,
+      delegate :  c.Tree,
       container : c.Tree,
       companion : Option[c.Tree]) : c.Expr[Any] = {
 

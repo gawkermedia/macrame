@@ -7,7 +7,7 @@ import scala.language.experimental.macros
 import scala.annotation.StaticAnnotation
 
 class enum extends StaticAnnotation {
-   def macroTransform(annottees : Any*) = macro enum.impl
+   def macroTransform(annottees : Any*) : Any = macro enum.impl
 }
 
 object enum {
