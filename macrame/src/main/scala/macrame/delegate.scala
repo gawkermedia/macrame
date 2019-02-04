@@ -139,7 +139,7 @@ object delegate {
    }
 
    def parameterImpl(c : Context)(
-      delegate : c.Tree,
+      delegate :  c.Tree,
       container : c.Tree,
       companion : Option[c.Tree]) : c.Expr[Any] = {
 

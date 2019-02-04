@@ -30,7 +30,7 @@ abstract class RefClassTest {
 }
 object RefClassTest {
    def apply[X[_] <: Ref[_], Y[_] <: Ref[_]](
-      id : Id[Post],
+      id :     Id[Post],
       parent : X[Post],
       author : Y[User]) : RefClassTest { type Parent[_] = X[_]; type Author[_] = Y[_] } = {
 
