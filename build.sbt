@@ -33,10 +33,10 @@ inThisBuild(Seq(
    
    credentials += Credentials(Path.userHome / ".ivy2" / ".sonatype"),
    
-   useGpg := true,
-   pgpSecretRing := file(System.getProperty("SEC_RING", "")),
-   pgpPublicRing := file(System.getProperty("PUB_RING", "")),
-   pgpPassphrase := Some(Array(System.getProperty("PGP_PASS", ""): _*)),
+   PgpKeys.useGpg := true,
+   Global / PgpKeys.pgpSecretRing := file(System.getProperty("SEC_RING", "")),
+   Global / PgpKeys.pgpPublicRing := file(System.getProperty("PUB_RING", "")),
+   Global / PgpKeys.pgpPassphrase := Some(Array(System.getProperty("PGP_PASS", ""): _*)),
    
    scalariformPreferences := scalariformPreferences.value
       .setPreference(IndentSpaces, 3)
