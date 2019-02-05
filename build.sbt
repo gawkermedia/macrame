@@ -64,7 +64,7 @@ lazy val root = Project("root", file("."))
 
 lazy val macrame = Project("macrame", file("macrame"))
    .settings(
-      version := "1.2.9",
+      version := "1.2.9-SNAPSHOT",
       pubishingSettings,
       libraryDependencies ++= Seq(
          "org.scala-lang" % "scala-compiler" % scalaVersion.value,
@@ -74,7 +74,7 @@ lazy val macrame = Project("macrame", file("macrame"))
 
 lazy val macramePlay = Project("macrame-play", file("macrame-play"))
    .settings(
-      version := "1.1.3-play-2.7.x",
+      version := "1.1.3-play-2.7.x-SNAPSHOT",
       pubishingSettings,
       libraryDependencies ++= Seq(
          "com.typesafe.play" %% "play" % "[2.7,2.8[" % Provided,
@@ -85,7 +85,7 @@ lazy val macramePlay = Project("macrame-play", file("macrame-play"))
 
 lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
    .settings(
-      version := "1.0.3-scalaz-7.2.x",
+      version := "1.0.3-scalaz-7.2.x-SNAPSHOT",
       pubishingSettings,
       libraryDependencies ++= Seq(
          "org.scalaz" %% "scalaz-core" % "[7.2,7.3[" % Provided,
