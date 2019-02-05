@@ -59,7 +59,10 @@ lazy val pubishingSettings = Seq(
 )
 
 lazy val root = Project("root", file("."))
-   .settings(publishArtifact := false)
+   .settings(
+      publishArtifact := false,
+      publish / skip := true
+   )
    .aggregate(macrame, macramePlay, macrameScalaz)
 
 lazy val macrame = Project("macrame", file("macrame"))
