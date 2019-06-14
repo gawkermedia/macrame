@@ -7,12 +7,11 @@ import org.scalatest.FunSuite
 import play.api.libs.json._
 import play.api.mvc.{ PathBindable, QueryStringBindable }
 
-import scala.math.Ordering
-
 class EnumTest extends FunSuite {
 
+   val yellowStr = "YELLOW"
+
    test("AsJson should work.") {
-      val yellowStr = "YELLOW"
       @enum class Color {
          Red
          Blue("BLUE")
@@ -26,7 +25,6 @@ class EnumTest extends FunSuite {
    }
 
    test("FromJson should work.") {
-      val yellowStr = "YELLOW"
       @enum class Color {
          Red
          Blue("BLUE")
@@ -53,7 +51,6 @@ class EnumTest extends FunSuite {
    }
 
    test("JsonConverters should work.") {
-      val yellowStr = "YELLOW"
       @enum class Color {
          Red
          Blue("BLUE")
@@ -61,6 +58,7 @@ class EnumTest extends FunSuite {
       }
       object Color extends JsonConverters[Color]
 
+      suppressUnusedWarning(Color)
       assertCompiles("""implicitly[Format[Color]]""")
    }
 

@@ -13,7 +13,6 @@ Global / sonatypeProjectHosting := Some(GitHubHosting("gawkermedia", "macrame", 
 
 Global / developers := List(
   Developer(id = "ClaireNeveu", name = "Claire Neveu", email = "", url = url("https://github.com/ClaireNeveu"))
-
 )
 
 Global / credentials += Credentials(Path.userHome / ".ivy2" / ".sonatype")
