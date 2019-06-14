@@ -19,7 +19,7 @@ import scala.util.Try
  * object Color extends AsJson[Color]
  * }}}
  */
-trait AsJson[Enum] { self : EnumApi[Enum] ⇒
+trait AsJson[Enum] { self : EnumApi[Enum] =>
    implicit val writes : Writes[Enum] = new Writes[Enum] {
       def writes(enum : Enum) : JsValue = JsString(asStringImpl(enum))
    }
@@ -49,7 +49,7 @@ trait AsJson[Enum] { self : EnumApi[Enum] ⇒
  * }
  * }}}
  */
-trait FromJson[Enum] { self : EnumApi[Enum] ⇒
+trait FromJson[Enum] { self : EnumApi[Enum] =>
    /** Indicates whether `reads` is case sensitive. */
    protected val caseSensitive = true
    implicit lazy val reads : Reads[Enum] =
@@ -64,9 +64,9 @@ trait FromJson[Enum] { self : EnumApi[Enum] ⇒
          new Reads[Enum] {
             def reads(js : JsValue) : JsResult[Enum] = {
                val in = js.asOpt[String].map(_.toLowerCase)
-               valuesImpl.map(v ⇒ asStringImpl(v).toLowerCase -> v)
-                  .find(v ⇒ in.exists(_ == v._1))
-                  .fold[JsResult[Enum]](JsError(s"Expected $className but found: $js"))(e ⇒ JsSuccess(e._2))
+               valuesImpl.map(v => asStringImpl(v).toLowerCase -> v)
+                  .find(v => in.exists(_ == v._1))
+                  .fold[JsResult[Enum]](JsError(s"Expected $className but found: $js"))(e => JsSuccess(e._2))
             }
          }
 
@@ -90,7 +90,7 @@ trait FromJson[Enum] { self : EnumApi[Enum] ⇒
  * JsNumber(0).validate[Color] // JsResult(Red)
  * }}}
  */
-trait FromJsonNumeric[Enum] { self : EnumApi[Enum] ⇒
+trait FromJsonNumeric[Enum] { self : EnumApi[Enum] =>
    implicit lazy val reads : Reads[Enum] =
       new Reads[Enum] {
          def reads(js : JsValue) : JsResult[Enum] =
@@ -125,7 +125,7 @@ trait FromJsonNumeric[Enum] { self : EnumApi[Enum] ⇒
  * }
  * }}}
  */
-trait JsonConverters[Enum] extends AsJson[Enum] with FromJson[Enum] { self : EnumApi[Enum] ⇒ }
+trait JsonConverters[Enum] extends AsJson[Enum] with FromJson[Enum] { self : EnumApi[Enum] => }
 
 /**
  * This trait provides an instance of `QueryStringBindable` for an enumeration.
@@ -151,22 +151,22 @@ trait JsonConverters[Enum] extends AsJson[Enum] with FromJson[Enum] { self : Enu
  * }
  * }}}
  */
-trait QueryStringConverters[Enum] { self : EnumApi[Enum] ⇒
+trait QueryStringConverters[Enum] { self : EnumApi[Enum] =>
    /** Indicates whether `bind` is case sensitive. */
    protected val caseSensitive = true
    implicit lazy val queryStringBindable : QueryStringBindable[Enum] =
       if (caseSensitive)
          new QueryStringBindable.Parsing(
-            s ⇒ fromStringImpl(s).getOrElse(throwException(s)),
+            s => fromStringImpl(s).getOrElse(throwException(s)),
             asStringImpl(_),
-            (key, e) ⇒ s"""Expected $className but found "${e.getMessage}" for key "$key".""")
+            (key, e) => s"""Expected $className but found "${e.getMessage}" for key "$key".""")
       else
          new QueryStringBindable.Parsing(
-            s ⇒ valuesImpl.map(v ⇒ asStringImpl(v).toLowerCase -> v)
-               .find(v ⇒ s.toLowerCase == v._1)
+            s => valuesImpl.map(v => asStringImpl(v).toLowerCase -> v)
+               .find(v => s.toLowerCase == v._1)
                .fold[Enum](throwException(s))(_._2),
             asStringImpl(_),
-            (key, e) ⇒ s"""Expected $className but found "${e.getMessage}" for key "$key".""")
+            (key, e) => s"""Expected $className but found "${e.getMessage}" for key "$key".""")
 }
 
 /**
@@ -190,12 +190,12 @@ trait QueryStringConverters[Enum] { self : EnumApi[Enum] ⇒
  * object Digit extends QueryStringNumericConverters[Digit]
  * }}}
  */
-trait QueryStringNumericConverters[Enum] { self : EnumApi[Enum] ⇒
+trait QueryStringNumericConverters[Enum] { self : EnumApi[Enum] =>
    implicit lazy val queryStringBindable : QueryStringBindable[Enum] =
       new QueryStringBindable.Parsing(
-         s ⇒ Try(fromIntImpl(s.toInt)).toOption.flatten.getOrElse(throwException(s)),
+         s => Try(fromIntImpl(s.toInt)).toOption.flatten.getOrElse(throwException(s)),
          asIntImpl(_).toString,
-         (key, e) ⇒ s"""Expected $className but found "${e.getMessage}" for key "$key".""")
+         (key, e) => s"""Expected $className but found "${e.getMessage}" for key "$key".""")
 }
 
 /**
@@ -222,22 +222,22 @@ trait QueryStringNumericConverters[Enum] { self : EnumApi[Enum] ⇒
  * }
  * }}}
  */
-trait PathConverters[Enum] { self : EnumApi[Enum] ⇒
+trait PathConverters[Enum] { self : EnumApi[Enum] =>
    /** Indicates whether `bind` is case sensitive. */
    protected val caseSensitive = true
    implicit lazy val pathBindable : PathBindable[Enum] =
       if (caseSensitive)
          new PathBindable.Parsing(
-            s ⇒ fromStringImpl(s).getOrElse(throwException(s)),
+            s => fromStringImpl(s).getOrElse(throwException(s)),
             asStringImpl(_),
-            (key, e) ⇒ s"""Expected $className but found "${e.getMessage}" for key "$key".""")
+            (key, e) => s"""Expected $className but found "${e.getMessage}" for key "$key".""")
       else
          new PathBindable.Parsing(
-            s ⇒ valuesImpl.map(v ⇒ asStringImpl(v).toLowerCase -> v)
-               .find(v ⇒ s.toLowerCase == v._1)
+            s => valuesImpl.map(v => asStringImpl(v).toLowerCase -> v)
+               .find(v => s.toLowerCase == v._1)
                .fold[Enum](throwException(s))(_._2),
             asStringImpl(_),
-            (key, e) ⇒ s"""Expected $className but found "${e.getMessage}" for key "$key".""")
+            (key, e) => s"""Expected $className but found "${e.getMessage}" for key "$key".""")
 }
 
 /**
@@ -261,10 +261,10 @@ trait PathConverters[Enum] { self : EnumApi[Enum] ⇒
  * object Digit extends PathNumericConverters[Digit]
  * }}}
  */
-trait PathNumericConverters[Enum] { self : EnumApi[Enum] ⇒
+trait PathNumericConverters[Enum] { self : EnumApi[Enum] =>
    implicit lazy val queryStringBindable : PathBindable[Enum] =
       new PathBindable.Parsing(
-         s ⇒ Try(fromIntImpl(s.toInt)).toOption.flatten.getOrElse(throwException(s)),
+         s => Try(fromIntImpl(s.toInt)).toOption.flatten.getOrElse(throwException(s)),
          asIntImpl(_).toString,
-         (key, e) ⇒ s"""Expected $className but found "${e.getMessage}" for key "$key".""")
+         (key, e) => s"""Expected $className but found "${e.getMessage}" for key "$key".""")
 }

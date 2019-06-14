@@ -19,7 +19,7 @@ import macrame.EnumApi
  * Color.asString(Red) // returns "Red"
  * }}}
  */
-trait AsString[Enum] { self : EnumApi[Enum] ⇒
+trait AsString[Enum] { self : EnumApi[Enum] =>
    @inline def asString(enum : Enum) : String = asStringImpl(enum)
    implicit class AsStringOps(enum : Enum) {
       @inline def asString : String = self.asString(enum)
@@ -42,7 +42,7 @@ trait AsString[Enum] { self : EnumApi[Enum] ⇒
  * Color.fromString("Red") // returns Some(Red)
  * }}}
  */
-trait FromString[Enum] { self : EnumApi[Enum] ⇒
+trait FromString[Enum] { self : EnumApi[Enum] =>
    @inline def fromString(str : String) : Option[Enum] = fromStringImpl(str)
 }
 
@@ -58,7 +58,7 @@ trait FromString[Enum] { self : EnumApi[Enum] ⇒
  * object Color extends StringConverters[Color]
  * }}}
  */
-trait StringConverters[Enum] extends AsString[Enum] with FromString[Enum] { self : EnumApi[Enum] ⇒ }
+trait StringConverters[Enum] extends AsString[Enum] with FromString[Enum] { self : EnumApi[Enum] => }
 
 /**
  * This trait provides conversion from an enumeration to Int. It works
@@ -77,7 +77,7 @@ trait StringConverters[Enum] extends AsString[Enum] with FromString[Enum] { self
  * Color.asInt(Red) // returns 0
  * }}}
  */
-trait AsInt[Enum] { self : EnumApi[Enum] ⇒
+trait AsInt[Enum] { self : EnumApi[Enum] =>
    @inline def asInt(enum : Enum) : Int = asIntImpl(enum)
    implicit class AsIntOps(enum : Enum) {
       @inline def asInt : Int = self.asInt(enum)
@@ -100,7 +100,7 @@ trait AsInt[Enum] { self : EnumApi[Enum] ⇒
  * Color.fromInt(0) // returns Some(Red)
  * }}}
  */
-trait FromInt[Enum] { self : EnumApi[Enum] ⇒
+trait FromInt[Enum] { self : EnumApi[Enum] =>
    @inline def fromInt(int : Int) : Option[Enum] = fromIntImpl(int)
 }
 
@@ -116,7 +116,7 @@ trait FromInt[Enum] { self : EnumApi[Enum] ⇒
  * object Color extends IntConverters[Color]
  * }}}
  */
-trait IntConverters[Enum] extends AsInt[Enum] with FromInt[Enum] { self : EnumApi[Enum] ⇒ }
+trait IntConverters[Enum] extends AsInt[Enum] with FromInt[Enum] { self : EnumApi[Enum] => }
 
 /**
  * This trait provides conversion from an enumeration to Short. It works
@@ -135,7 +135,7 @@ trait IntConverters[Enum] extends AsInt[Enum] with FromInt[Enum] { self : EnumAp
  * Color.asShort(Red) // returns 0
  * }}}
  */
-trait AsShort[Enum] { self : EnumApi[Enum] ⇒
+trait AsShort[Enum] { self : EnumApi[Enum] =>
    @inline def asShort(enum : Enum) : Short = asShortImpl(enum)
    implicit class AsShortOps(enum : Enum) {
       @inline def asShort : Short = self.asShort(enum)
@@ -158,7 +158,7 @@ trait AsShort[Enum] { self : EnumApi[Enum] ⇒
  * Color.fromShort(0 : Short) // returns Some(Red)
  * }}}
  */
-trait FromShort[Enum] { self : EnumApi[Enum] ⇒
+trait FromShort[Enum] { self : EnumApi[Enum] =>
    @inline def fromShort(short : Short) : Option[Enum] = fromShortImpl(short)
 }
 
@@ -174,7 +174,7 @@ trait FromShort[Enum] { self : EnumApi[Enum] ⇒
  * object Color extends ShortConverters[Color]
  * }}}
  */
-trait ShortConverters[Enum] extends AsShort[Enum] with FromShort[Enum] { self : EnumApi[Enum] ⇒ }
+trait ShortConverters[Enum] extends AsShort[Enum] with FromShort[Enum] { self : EnumApi[Enum] => }
 
 /**
  * This trait provides conversion from an enumeration to Long. It works
@@ -193,7 +193,7 @@ trait ShortConverters[Enum] extends AsShort[Enum] with FromShort[Enum] { self : 
  * Color.asLong(Red) // returns 0l
  * }}}
  */
-trait AsLong[Enum] { self : EnumApi[Enum] ⇒
+trait AsLong[Enum] { self : EnumApi[Enum] =>
    @inline def asLong(enum : Enum) : Long = asLongImpl(enum)
    implicit class AsLongOps(enum : Enum) {
       @inline def asLong : Long = self.asLong(enum)
@@ -216,7 +216,7 @@ trait AsLong[Enum] { self : EnumApi[Enum] ⇒
  * Color.fromLong(0l) // returns Some(Red)
  * }}}
  */
-trait FromLong[Enum] { self : EnumApi[Enum] ⇒
+trait FromLong[Enum] { self : EnumApi[Enum] =>
    @inline def fromLong(long : Long) : Option[Enum] = fromLongImpl(long)
 }
 
@@ -232,7 +232,7 @@ trait FromLong[Enum] { self : EnumApi[Enum] ⇒
  * object Color extends LongConverters[Color]
  * }}}
  */
-trait LongConverters[Enum] extends AsLong[Enum] with FromLong[Enum] { self : EnumApi[Enum] ⇒ }
+trait LongConverters[Enum] extends AsLong[Enum] with FromLong[Enum] { self : EnumApi[Enum] => }
 
 /**
  * This trait provides the numeric/enumeration conversions from `IntConverters`, `ShortConverters`, and `LongConverters`.
@@ -246,7 +246,7 @@ trait LongConverters[Enum] extends AsLong[Enum] with FromLong[Enum] { self : Enu
  * object Color extends NumericConverters[Color]
  * }}}
  */
-trait NumericConverters[Enum] extends LongConverters[Enum] with ShortConverters[Enum] with IntConverters[Enum] { self : EnumApi[Enum] ⇒ }
+trait NumericConverters[Enum] extends LongConverters[Enum] with ShortConverters[Enum] with IntConverters[Enum] { self : EnumApi[Enum] => }
 
 /**
  * This trait provides an `Ordering` instance for an enumeration as well
@@ -270,7 +270,7 @@ trait NumericConverters[Enum] extends LongConverters[Enum] with ShortConverters[
  * Color.last // Yellow
  * }}}
  */
-trait Ordered[Enum] { self : EnumApi[Enum] ⇒
+trait Ordered[Enum] { self : EnumApi[Enum] =>
    @inline implicit val ordering : Ordering[Enum] = orderingImpl
    @inline def next(enum : Enum) : Option[Enum] = nextImpl(enum)
    @inline def prev(enum : Enum) : Option[Enum] = prevImpl(enum)
@@ -306,7 +306,7 @@ trait Ordered[Enum] { self : EnumApi[Enum] ⇒
  * Color.nextMod(Yellow) // Red
  * }}}
  */
-trait OrderedModular[Enum] extends Ordered[Enum] { self : EnumApi[Enum] ⇒
+trait OrderedModular[Enum] extends Ordered[Enum] { self : EnumApi[Enum] =>
    @inline def nextMod(enum : Enum) : Enum = nextModImpl(enum)
    @inline def prevMod(enum : Enum) : Enum = prevModImpl(enum)
    implicit class OrderedModularOps(enum : Enum) {
@@ -321,6 +321,6 @@ trait OrderedModular[Enum] extends Ordered[Enum] { self : EnumApi[Enum] ⇒
  * that you use a smaller subset of these functions as provided by the other traits
  * in the `macrame.enums` namespace.
  */
-trait All[Enum] extends StringConverters[Enum] with NumericConverters[Enum] with OrderedModular[Enum] { self : EnumApi[Enum] ⇒
+trait All[Enum] extends StringConverters[Enum] with NumericConverters[Enum] with OrderedModular[Enum] { self : EnumApi[Enum] =>
    @inline def values : Set[Enum] = valuesImpl
 }

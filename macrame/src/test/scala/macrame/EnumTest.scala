@@ -7,8 +7,8 @@ import scala.math.Ordering
 
 class EnumTest extends FunSuite {
 
-   trait EnumExtension[A] { self : EnumApi[A] ⇒
-      def foo : A ⇒ String = a ⇒ asStringImpl(a)
+   trait EnumExtension[A] { self : EnumApi[A] =>
+      def foo : A => String = a => asStringImpl(a)
    }
 
    test("Passing a non-String literal to a case should fail.") {

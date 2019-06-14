@@ -22,7 +22,7 @@ inThisBuild(Seq(
    homepage := Some(url("https://github.com/gawkermedia/macrame")),
 
    scalaVersion := "2.12.8",
-   crossScalaVersions := Seq("2.12.8", "2.11.8"),
+   crossScalaVersions := Seq("2.13.0-M5", "2.12.8", "2.11.12"),
    scalacOptions ++= Seq(
       "-unchecked",
       "-deprecation",
@@ -30,7 +30,7 @@ inThisBuild(Seq(
       "-language:higherKinds",
       "-language:postfixOps"
    ),
-   
+
    credentials += Credentials(Path.userHome / ".ivy2" / ".sonatype"),
    
    PgpKeys.useGpg := true,
@@ -42,7 +42,6 @@ inThisBuild(Seq(
       .setPreference(IndentSpaces, 3)
       .setPreference(SpaceBeforeColon, true)
       .setPreference(DanglingCloseParenthesis, Preserve)
-      .setPreference(RewriteArrowSymbols, true)
       .setPreference(DoubleIndentConstructorArguments, true)
       .setPreference(AlignParameters, true)
       .setPreference(AlignSingleLineCaseStatements, true)
@@ -68,32 +67,71 @@ lazy val root = Project("root", file("."))
 lazy val macrame = Project("macrame", file("macrame"))
    .settings(
       version := "1.2.9",
+      scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
+           Seq(
+             "-Ymacro-annotations"
+           )
+         case x =>
+           Seq()
+      }),
       pubishingSettings,
       libraryDependencies ++= Seq(
          "org.scala-lang" % "scala-compiler" % scalaVersion.value,
-         compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
-         "org.scalatest" %% "scalatest" % "3.0.0" % Test)
+         "org.scalatest" %% "scalatest" % "3.0.7" % Test),
+      libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
+           Seq()
+         case _ =>
+           Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full))
+      })
    )
 
 lazy val macramePlay = Project("macrame-play", file("macrame-play"))
    .settings(
       version := "1.1.3-play-2.7.x",
+      scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
+           Seq(
+             "-Ymacro-annotations"
+           )
+         case x =>
+           Seq()
+      }),
       pubishingSettings,
       libraryDependencies ++= Seq(
          "com.typesafe.play" %% "play" % "[2.7,2.8[" % Provided,
-         compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" % Test cross CrossVersion.full),
-         "org.scalatest" %% "scalatest" % "3.0.0" % Test)
+         "org.scalatest" %% "scalatest" % "3.0.7" % Test),
+      libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
+           Seq()
+         case _ =>
+           Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full))
+      })
    )
    .dependsOn(macrame)
 
 lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
    .settings(
       version := "1.0.3-scalaz-7.2.x",
+      scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
+           Seq(
+             "-Ymacro-annotations"
+           )
+         case x =>
+           Seq()
+      }),
       pubishingSettings,
       libraryDependencies ++= Seq(
          "org.scalaz" %% "scalaz-core" % "[7.2,7.3[" % Provided,
-         compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" % Test cross CrossVersion.full),
-         "org.scalatest" %% "scalatest" % "3.0.0" % Test,
-         "org.scalacheck" %% "scalacheck" % "1.13.4" % Test)
+         "org.scalatest" %% "scalatest" % "3.0.7" % Test,
+         "org.scalacheck" %% "scalacheck" % "1.14.0" % Test),
+      libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
+           Seq()
+         case _ =>
+           Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full))
+      })
    )
    .dependsOn(macrame)

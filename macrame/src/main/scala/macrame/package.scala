@@ -1,6 +1,6 @@
 import language.experimental.macros
 import reflect.macros.whitebox.Context
-import macrame.{ internal ⇒ fn }
+import macrame.{ internal => fn }
 
 package object macrame {
 
@@ -37,12 +37,12 @@ package object macrame {
          import c.universe._
 
          val s = c.prefix.tree match {
-            case Apply(_, List(Apply(_, rawParts))) ⇒ rawParts
-            case x                                  ⇒ c.abort(c.enclosingPosition, "unexpected tree: " + show(x))
+            case Apply(_, List(Apply(_, rawParts))) => rawParts
+            case x                                  => c.abort(c.enclosingPosition, "unexpected tree: " + show(x))
          }
 
          val parts = s map {
-            case Literal(Constant(const : String)) ⇒ const
+            case Literal(Constant(const : String)) => const
          }
 
          def getPoint(msg : String) : Int =
@@ -57,25 +57,25 @@ package object macrame {
             // Check if the regex is valid.
             try {
                val regex = parts.zipAll(placeHolders, "", "").foldLeft("") {
-                  case (a, (b, c)) ⇒ a + b + c
+                  case (a, (b, c)) => a + b + c
                }
                regex.r
             } catch {
-               case e : java.util.regex.PatternSyntaxException ⇒
+               case e : java.util.regex.PatternSyntaxException =>
                   val pos = s.head.pos.withPoint(getPoint(e.getMessage) + s.head.pos.point)
                   c.abort(pos, "Invalid Regex: " + e.getMessage.split("\n").head)
             }
 
             val mixed : List[(Tree, Tree)] = s.zipAll(
-               args.map(p ⇒ q"java.util.regex.Pattern.quote(${p.tree})"),
+               args.map(p => q"java.util.regex.Pattern.quote(${p.tree})"),
                emptyString,
                emptyString)
             val regexString = mixed.foldLeft(emptyString) {
-               case (a, (b, c)) ⇒ q"$a + $b + $c"
+               case (a, (b, c)) => q"$a + $b + $c"
             }
             c.Expr[scala.util.matching.Regex](q"""($regexString).r""")
          } catch {
-            case e : Throwable ⇒
+            case e : Throwable =>
                c.abort(c.prefix.tree.pos, e.getMessage)
          }
       }
@@ -83,8 +83,8 @@ package object macrame {
       def members[T : c.WeakTypeTag](c : Context)(obj : c.Expr[Object]) : c.Expr[List[T]] =
          fn.sequenceExpr(c)(
             fn.members[T](c)(obj)
-               .map(s ⇒ fn.renderName(s.name))
-               .map(n ⇒ c.Expr[T](c.universe.Select(obj.tree, c.universe.TermName(n))))
+               .map(s => fn.renderName(s.name))
+               .map(n => c.Expr[T](c.universe.Select(obj.tree, c.universe.TermName(n))))
          )
 
       def memberMap[T : c.WeakTypeTag](c : Context)(obj : c.Expr[Object]) : c.Expr[Map[String, T]] = {
@@ -92,7 +92,7 @@ package object macrame {
 
          val tups = fn.sequenceExpr(c)(fn.members(c)(obj)
             .map(_.name.decodedName.toString.trim)
-            .map(n ⇒
+            .map(n =>
                // ("n", obj.n)
                c.Expr[(String, T)](
                   Apply(Select(Ident(TermName("Tuple2")), TermName("apply")), List(

@@ -15,13 +15,13 @@ object delegate {
       import Flag._
 
       val (delegate : Tree, container : Option[Tree], companion : Option[Tree]) = annottees match {
-         case delegate :: clazz :: obj :: Nil ⇒ (delegate.tree, Some(clazz.tree), Some(obj.tree))
-         case delegate :: clazz :: Nil        ⇒ (delegate.tree, Some(clazz.tree), None)
-         case delegate :: Nil                 ⇒ (delegate.tree, None, None)
+         case delegate :: clazz :: obj :: Nil => (delegate.tree, Some(clazz.tree), Some(obj.tree))
+         case delegate :: clazz :: Nil        => (delegate.tree, Some(clazz.tree), None)
+         case delegate :: Nil                 => (delegate.tree, None, None)
       }
       container match {
-         case Some(tree) ⇒ parameterImpl(c)(delegate, tree, companion)
-         case None       ⇒ methodImpl(c)(delegate)
+         case Some(tree) => parameterImpl(c)(delegate, tree, companion)
+         case None       => methodImpl(c)(delegate)
       }
    }
 
@@ -47,8 +47,8 @@ object delegate {
          val typeSymbol = param.typeSignature.typeSymbol
          val typeVars = enclosingTypes.map(_.name.toTypeName)
          val (fqpn, _) = (owners(typeSymbol) :+ typeSymbol).filter(_.isType) match {
-            case h :: t ⇒ t.foldLeft[(Tree, Boolean)]((Ident(h.name.toTermName), false)) {
-               case ((res, isType), curr) ⇒
+            case h :: t => t.foldLeft[(Tree, Boolean)]((Ident(h.name.toTermName), false)) {
+               case ((res, isType), curr) =>
                   val currIsType = curr.isType && !curr.isPackage
                   if (isType)
                      (SelectFromTypeTree(res, curr.name.toTypeName), true)
@@ -62,7 +62,7 @@ object delegate {
                               curr.name.toTermName),
                            isType || currIsType)
             }
-            case _ ⇒ (EmptyTree, false)
+            case _ => (EmptyTree, false)
          }
          if (fqpn != EmptyTree && !typeVars.contains(typeSymbol.name.toTypeName))
             fqpn
@@ -71,25 +71,25 @@ object delegate {
       }
 
       val (delegateName, delegateType) = delegate match {
-         case ValDef(_, name, tpt, _) ⇒
+         case ValDef(_, name, tpt, _) =>
             name -> getType(tpt)
-         case DefDef(_, name, tparams, vparamss, tpt, _) if tparams.isEmpty && vparamss.isEmpty ⇒
+         case DefDef(_, name, tparams, vparamss, tpt, _) if tparams.isEmpty && vparamss.isEmpty =>
             name -> getType(tpt)
-         case _ ⇒
+         case _ =>
             c.abort(NoPosition, "Delegate must be a parameter or method with no arguments.")
       }
 
       val containerType = c.typeOf[AnyRef]
 
-      val delegatedMembers : List[Tree] = delegateType.members.filter(s ⇒
+      val delegatedMembers : List[Tree] = delegateType.members.filter(s =>
          (containerType.member(s.name) == NoSymbol) &&
             (s.name.decodedName.toString != "<init>") &&
             !(delegateType.typeSymbol.asClass.isCaseClass && s.name.decodedName.toString == "copy") &&
             !s.isPrivate &&
             !s.isProtected
       ).collect {
-         case method : MethodSymbol ⇒
-            val arguments = method.paramLists.map(_.map { p ⇒
+         case method : MethodSymbol =>
+            val arguments = method.paramLists.map(_.map { p =>
                ValDef(
                   Modifiers(PARAM),
                   p.name.toTermName,
@@ -97,13 +97,13 @@ object delegate {
                   EmptyTree)
             })
             val methodName = method.name.toTermName
-            val typeArgs = method.typeParams.map(t ⇒
+            val typeArgs = method.typeParams.map(t =>
                TypeDef(
                   Modifiers(PARAM),
                   t.name.toTypeName,
                   List(),
                   TypeBoundsTree(tq"${c.typeOf[Nothing]}", tq"${c.typeOf[Any]}")))
-            val passedTypeArgs = method.typeParams.map(t ⇒ Ident(t.name.toTypeName))
+            val passedTypeArgs = method.typeParams.map(t => Ident(t.name.toTypeName))
 
             val methodCall =
                if (passedTypeArgs.nonEmpty)
@@ -118,7 +118,7 @@ object delegate {
                      methodName)
 
             val rhs = arguments.foldLeft[Tree](methodCall) {
-               case (tree, args) ⇒ Apply(tree, args.map(v ⇒ Ident(v.name)))
+               case (tree, args) => Apply(tree, args.map(v => Ident(v.name)))
             }
             val mods =
                if (method.isImplicit)
@@ -150,20 +150,20 @@ object delegate {
          c.typecheck(q"""(throw new java.lang.Exception("")) : $tpt""").tpe
 
       val (delegateName, delegateType) = delegate match {
-         case ValDef(_, name, tpt, _) ⇒
+         case ValDef(_, name, tpt, _) =>
             name -> getType(tpt)
-         case _ ⇒
+         case _ =>
             c.abort(NoPosition, "Delegate must be a parameter or method.")
       }
       val output = container match {
-         case ClassDef(mods, containerName, tparams, impl) ⇒
+         case ClassDef(mods, containerName, tparams, impl) =>
             val existingMembers = impl.body.flatMap {
-               case DefDef(_, name, _, _, _, _) ⇒ List(name)
-               case ValDef(_, name, _, _)       ⇒ List(name)
-               case t                           ⇒ Nil
+               case DefDef(_, name, _, _, _, _) => List(name)
+               case ValDef(_, name, _, _)       => List(name)
+               case t                           => Nil
             }
             val containerType = c.typecheck(q"""(throw new java.lang.Exception("")) : Object with ..${impl.parents}""").tpe
-            val delegatedMembers = delegateType.members.filter(s ⇒
+            val delegatedMembers = delegateType.members.filter(s =>
                !existingMembers.contains(s.name) &&
                   (containerType.member(s.name) == NoSymbol) &&
                   (s.name.decodedName.toString != "<init>") &&
@@ -171,12 +171,12 @@ object delegate {
                   !s.isPrivate &&
                   !s.isProtected
             ).collect {
-               case method : MethodSymbol ⇒
-                  val arguments = method.paramLists.map(_.map { p ⇒
+               case method : MethodSymbol =>
+                  val arguments = method.paramLists.map(_.map { p =>
                      val typeSignature = p.typeSignature match {
-                        case TypeRef(NoPrefix, t, Nil) ⇒
+                        case TypeRef(NoPrefix, t, Nil) =>
                            Ident(p.typeSignature.typeSymbol.name.toTypeName)
-                        case _ ⇒ tq"${p.typeSignature}"
+                        case _ => tq"${p.typeSignature}"
                      }
                      ValDef(
                         Modifiers(PARAM),
@@ -185,13 +185,13 @@ object delegate {
                         EmptyTree)
                   })
                   val methodName = method.name.toTermName
-                  val typeArgs = method.typeParams.map(t ⇒
+                  val typeArgs = method.typeParams.map(t =>
                      TypeDef(
                         Modifiers(PARAM),
                         t.name.toTypeName,
                         List(),
                         TypeBoundsTree(tq"${c.typeOf[Nothing]}", tq"${c.typeOf[Any]}")))
-                  val passedTypeArgs = method.typeParams.map(t ⇒ Ident(t.name.toTypeName))
+                  val passedTypeArgs = method.typeParams.map(t => Ident(t.name.toTypeName))
 
                   val methodCall =
                      if (passedTypeArgs.nonEmpty)
@@ -206,7 +206,7 @@ object delegate {
                            methodName)
 
                   val rhs = arguments.foldLeft[Tree](methodCall) {
-                     case (tree, args) ⇒ Apply(tree, args.map(v ⇒ Ident(v.name)))
+                     case (tree, args) => Apply(tree, args.map(v => Ident(v.name)))
                   }
                   DefDef(
                      Modifiers(),
@@ -218,7 +218,7 @@ object delegate {
             }
 
             ClassDef(mods, containerName, tparams, Template(impl.parents, impl.self, impl.body ++ delegatedMembers))
-         case _ ⇒ c.abort(NoPosition, "Delegate must be a parameter or method of a class.")
+         case _ => c.abort(NoPosition, "Delegate must be a parameter or method of a class.")
       }
       // println(output)
       c.Expr[Any](Block(output :: companion.toList, Literal(Constant(()))))
