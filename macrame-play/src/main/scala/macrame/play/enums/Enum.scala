@@ -19,9 +19,9 @@ import scala.util.Try
  * object Color extends AsJson[Color]
  * }}}
  */
-trait AsJson[Enum] { self : EnumApi[Enum] =>
-   implicit val writes : Writes[Enum] = new Writes[Enum] {
-      def writes(enum : Enum) : JsValue = JsString(asStringImpl(enum))
+trait AsJson[E] { self : EnumApi[E] =>
+   implicit val writes : Writes[E] = new Writes[E] {
+      def writes(enum : E) : JsValue = JsString(asStringImpl(enum))
    }
 }
 
@@ -49,24 +49,24 @@ trait AsJson[Enum] { self : EnumApi[Enum] =>
  * }
  * }}}
  */
-trait FromJson[Enum] { self : EnumApi[Enum] =>
+trait FromJson[E] { self : EnumApi[E] =>
    /** Indicates whether `reads` is case sensitive. */
    protected val caseSensitive = true
-   implicit lazy val reads : Reads[Enum] =
+   implicit lazy val reads : Reads[E] =
       if (caseSensitive)
-         new Reads[Enum] {
-            def reads(js : JsValue) : JsResult[Enum] =
+         new Reads[E] {
+            def reads(js : JsValue) : JsResult[E] =
                js.asOpt[String]
                   .flatMap(fromStringImpl)
-                  .fold[JsResult[Enum]](JsError(s"Expected $className but found: $js"))(JsSuccess(_))
+                  .fold[JsResult[E]](JsError(s"Expected $className but found: $js"))(JsSuccess(_))
          }
       else
-         new Reads[Enum] {
-            def reads(js : JsValue) : JsResult[Enum] = {
+         new Reads[E] {
+            def reads(js : JsValue) : JsResult[E] = {
                val in = js.asOpt[String].map(_.toLowerCase)
                valuesImpl.map(v => asStringImpl(v).toLowerCase -> v)
                   .find(v => in.exists(_ == v._1))
-                  .fold[JsResult[Enum]](JsError(s"Expected $className but found: $js"))(e => JsSuccess(e._2))
+                  .fold[JsResult[E]](JsError(s"Expected $className but found: $js"))(e => JsSuccess(e._2))
             }
          }
 
@@ -90,13 +90,13 @@ trait FromJson[Enum] { self : EnumApi[Enum] =>
  * JsNumber(0).validate[Color] // JsResult(Red)
  * }}}
  */
-trait FromJsonNumeric[Enum] { self : EnumApi[Enum] =>
-   implicit lazy val reads : Reads[Enum] =
-      new Reads[Enum] {
-         def reads(js : JsValue) : JsResult[Enum] =
+trait FromJsonNumeric[E] { self : EnumApi[E] =>
+   implicit lazy val reads : Reads[E] =
+      new Reads[E] {
+         def reads(js : JsValue) : JsResult[E] =
             js.asOpt[Int]
                .flatMap(fromIntImpl)
-               .fold[JsResult[Enum]](JsError(s"Expected $className but found: $js"))(JsSuccess(_))
+               .fold[JsResult[E]](JsError(s"Expected $className but found: $js"))(JsSuccess(_))
       }
 
 }
@@ -125,7 +125,7 @@ trait FromJsonNumeric[Enum] { self : EnumApi[Enum] =>
  * }
  * }}}
  */
-trait JsonConverters[Enum] extends AsJson[Enum] with FromJson[Enum] { self : EnumApi[Enum] => }
+trait JsonConverters[E] extends AsJson[E] with FromJson[E] { self : EnumApi[E] => }
 
 /**
  * This trait provides an instance of `QueryStringBindable` for an enumeration.
@@ -151,10 +151,10 @@ trait JsonConverters[Enum] extends AsJson[Enum] with FromJson[Enum] { self : Enu
  * }
  * }}}
  */
-trait QueryStringConverters[Enum] { self : EnumApi[Enum] =>
+trait QueryStringConverters[E] { self : EnumApi[E] =>
    /** Indicates whether `bind` is case sensitive. */
    protected val caseSensitive = true
-   implicit lazy val queryStringBindable : QueryStringBindable[Enum] =
+   implicit lazy val queryStringBindable : QueryStringBindable[E] =
       if (caseSensitive)
          new QueryStringBindable.Parsing(
             s => fromStringImpl(s).getOrElse(throwException(s)),
@@ -164,7 +164,7 @@ trait QueryStringConverters[Enum] { self : EnumApi[Enum] =>
          new QueryStringBindable.Parsing(
             s => valuesImpl.map(v => asStringImpl(v).toLowerCase -> v)
                .find(v => s.toLowerCase == v._1)
-               .fold[Enum](throwException(s))(_._2),
+               .fold[E](throwException(s))(_._2),
             asStringImpl(_),
             (key, e) => s"""Expected $className but found "${e.getMessage}" for key "$key".""")
 }
@@ -190,8 +190,8 @@ trait QueryStringConverters[Enum] { self : EnumApi[Enum] =>
  * object Digit extends QueryStringNumericConverters[Digit]
  * }}}
  */
-trait QueryStringNumericConverters[Enum] { self : EnumApi[Enum] =>
-   implicit lazy val queryStringBindable : QueryStringBindable[Enum] =
+trait QueryStringNumericConverters[E] { self : EnumApi[E] =>
+   implicit lazy val queryStringBindable : QueryStringBindable[E] =
       new QueryStringBindable.Parsing(
          s => Try(fromIntImpl(s.toInt)).toOption.flatten.getOrElse(throwException(s)),
          asIntImpl(_).toString,
@@ -222,10 +222,10 @@ trait QueryStringNumericConverters[Enum] { self : EnumApi[Enum] =>
  * }
  * }}}
  */
-trait PathConverters[Enum] { self : EnumApi[Enum] =>
+trait PathConverters[E] { self : EnumApi[E] =>
    /** Indicates whether `bind` is case sensitive. */
    protected val caseSensitive = true
-   implicit lazy val pathBindable : PathBindable[Enum] =
+   implicit lazy val pathBindable : PathBindable[E] =
       if (caseSensitive)
          new PathBindable.Parsing(
             s => fromStringImpl(s).getOrElse(throwException(s)),
@@ -235,7 +235,7 @@ trait PathConverters[Enum] { self : EnumApi[Enum] =>
          new PathBindable.Parsing(
             s => valuesImpl.map(v => asStringImpl(v).toLowerCase -> v)
                .find(v => s.toLowerCase == v._1)
-               .fold[Enum](throwException(s))(_._2),
+               .fold[E](throwException(s))(_._2),
             asStringImpl(_),
             (key, e) => s"""Expected $className but found "${e.getMessage}" for key "$key".""")
 }
@@ -261,8 +261,8 @@ trait PathConverters[Enum] { self : EnumApi[Enum] =>
  * object Digit extends PathNumericConverters[Digit]
  * }}}
  */
-trait PathNumericConverters[Enum] { self : EnumApi[Enum] =>
-   implicit lazy val queryStringBindable : PathBindable[Enum] =
+trait PathNumericConverters[E] { self : EnumApi[E] =>
+   implicit lazy val queryStringBindable : PathBindable[E] =
       new PathBindable.Parsing(
          s => Try(fromIntImpl(s.toInt)).toOption.flatten.getOrElse(throwException(s)),
          asIntImpl(_).toString,

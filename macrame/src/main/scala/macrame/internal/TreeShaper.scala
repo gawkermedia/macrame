@@ -43,9 +43,9 @@ object TreeShaper {
    def getMembers(c : Context)(tree : c.Tree) : List[c.Tree] = {
       import c.universe._
       tree match {
-         case ClassDef(mods, name, tparams, impl) => impl.body
-         case ModuleDef(mods, name, impl)         => impl.body
-         case _                                   => Nil
+         case ClassDef(_, _, _, impl) => impl.body
+         case ModuleDef(_, _, impl)   => impl.body
+         case _                       => Nil
       }
    }
    def procMembers(c : Context)(f : c.Tree => List[c.Tree])(tree : c.Tree) : List[c.Tree] = {

@@ -5,39 +5,51 @@ inThisBuild(Seq(
    organizationName := "Kinja",
    organizationHomepage := Some(url("https://kinja.com/")),
 
-   scmInfo := Some(ScmInfo(
-      url("https://github.com/gawkermedia/macrame"),
-      "scm:git@github.com:gawkermedia/macrame.git"
-   )),
-
-   developers := List(Developer(
-      id    = "claireneveu",
-      name  = "Claire Neveu",
-      email = "claireneveu@kinja.com",
-      url   = url("https://kinja.com")
-   )),
-
-   description := "Macrame provides macro-based replacements for parts of the Scala standard library.",
-   licenses := List("BSD 3-Clause" -> new URL("https://raw.githubusercontent.com/gawkermedia/macrame/master/LICENSE")),
-   homepage := Some(url("https://github.com/gawkermedia/macrame")),
-
    scalaVersion := "2.12.8",
    crossScalaVersions := Seq("2.13.0-M5", "2.12.8", "2.11.12"),
    scalacOptions ++= Seq(
-      "-unchecked",
-      "-deprecation",
-      "-feature",
-      "-language:higherKinds",
-      "-language:postfixOps"
+      "-unchecked",                        // Show details of unchecked warnings.
+      "-deprecation",                      // Show details of deprecation warnings.
+      "-encoding", "UTF-8",                // Set correct encoding for Scaladoc.
+      "-feature",                          // Show details of feature warnings.
+      "-explaintypes",                     // Explain type errors in more detail.
+      "-Xcheckinit",                       // Wrap field accessors to throw an exception on uninitialized access.
+      "-Xlint",                            // Ensure best practices are being followed.
+      "-Xlint:adapted-args",               // Warn if an argument list is modified to match the receiver.
+      "-Xlint:delayedinit-select",         // Selecting member of DelayedInit.
+      "-Xlint:doc-detached",               // A Scaladoc comment appears to be detached from its element.
+      "-Xlint:inaccessible",               // Warn about inaccessible types in method signatures.
+      "-Xlint:infer-any",                  // Warn when a type argument is inferred to be `Any`.
+      "-Xlint:missing-interpolator",       // A string literal appears to be missing an interpolator id.
+      "-Xlint:nullary-override",           // Warn when non-nullary `def f()' overrides nullary `def f'.
+      "-Xlint:nullary-unit",               // Warn when nullary methods return Unit.
+      "-Xlint:option-implicit",            // Option.apply used implicit view.
+      "-Xlint:package-object-classes",     // Class or object defined in package object.
+      "-Xlint:poly-implicit-overload",     // Parameterized overloaded implicit methods are not visible as view bounds.
+      "-Xlint:private-shadow",             // A private field (or class parameter) shadows a superclass field.
+      "-Xlint:stars-align",                // Pattern sequence wildcard must align with sequence component.
+      "-Xlint:type-parameter-shadow",      // A local type parameter shadows a type already in scope.
+      "-Ywarn-dead-code",                  // Fail when dead code is present. Prevents accidentally unreachable code.
+      "-Ywarn-dead-code",                  // Fail when dead code is present. Prevents accidentally unreachable code.
+      "-Ywarn-numeric-widen",              // Warn when numerics are widened.
+      "-Ywarn-value-discard"               // Prevent accidental discarding of results in unit functions.
    ),
 
-   credentials += Credentials(Path.userHome / ".ivy2" / ".sonatype"),
-   
-   PgpKeys.useGpg := true,
-   Global / PgpKeys.pgpSecretRing := file(System.getProperty("SEC_RING", "")),
-   Global / PgpKeys.pgpPublicRing := file(System.getProperty("PUB_RING", "")),
-   Global / PgpKeys.pgpPassphrase := Some(Array(System.getProperty("PGP_PASS", ""): _*)),
-   
+   scalacOptions ++= (CrossVersion.partialVersion((scalaVersion in ThisProject).value) match {
+         case Some((2, scalaMajor)) if scalaMajor >= 12 =>
+           Seq(
+             "-Xlint:constant",                   // Evaluation of a constant arithmetic expression results in an error.
+             "-Ywarn-extra-implicit",             // Warn when more than one implicit parameter section is defined.
+             "-Ywarn-unused:implicits",           // Warn if an implicit parameter is unused.
+             "-Ywarn-unused:locals",              // Warn if a local definition is unused.
+             "-Ywarn-unused:params",              // Warn if a value parameter is unused.
+             "-Ywarn-unused:patvars",             // Warn if a variable bound in a pattern is unused.
+             "-Ywarn-unused:privates"             // Warn if a private member is unused.
+           )
+         case x =>
+           Seq()
+   }),
+
    scalariformPreferences := scalariformPreferences.value
       .setPreference(IndentSpaces, 3)
       .setPreference(SpaceBeforeColon, true)
@@ -46,16 +58,6 @@ inThisBuild(Seq(
       .setPreference(AlignParameters, true)
       .setPreference(AlignSingleLineCaseStatements, true)
 ))
-
-lazy val pubishingSettings = Seq(
-   publishTo := {
-      val nexus = "https://oss.sonatype.org/"
-      if (isSnapshot.value)
-         Some("snapshots" at nexus + "content/repositories/snapshots")
-      else
-         Some("releases" at nexus + "service/local/staging/deploy/maven2")
-   }
-)
 
 lazy val root = Project("root", file("."))
    .settings(
@@ -66,7 +68,9 @@ lazy val root = Project("root", file("."))
 
 lazy val macrame = Project("macrame", file("macrame"))
    .settings(
-      version := "1.2.9",
+      version := "1.2.10-SNAPSHOT",
+      publishTo := sonatypePublishTo.value,
+      sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
          case Some((2, scalaMajor)) if scalaMajor >= 13 =>
            Seq(
@@ -75,7 +79,6 @@ lazy val macrame = Project("macrame", file("macrame"))
          case x =>
            Seq()
       }),
-      pubishingSettings,
       libraryDependencies ++= Seq(
          "org.scala-lang" % "scala-compiler" % scalaVersion.value,
          "org.scalatest" %% "scalatest" % "3.0.7" % Test),
@@ -89,7 +92,9 @@ lazy val macrame = Project("macrame", file("macrame"))
 
 lazy val macramePlay = Project("macrame-play", file("macrame-play"))
    .settings(
-      version := "1.1.3-play-2.7.x",
+      version := "1.1.4-play-2.7.x-SNAPSHOT",
+      publishTo := sonatypePublishTo.value,
+      sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
          case Some((2, scalaMajor)) if scalaMajor >= 13 =>
            Seq(
@@ -98,7 +103,6 @@ lazy val macramePlay = Project("macrame-play", file("macrame-play"))
          case x =>
            Seq()
       }),
-      pubishingSettings,
       libraryDependencies ++= Seq(
          "com.typesafe.play" %% "play" % "[2.7,2.8[" % Provided,
          "org.scalatest" %% "scalatest" % "3.0.7" % Test),
@@ -113,7 +117,9 @@ lazy val macramePlay = Project("macrame-play", file("macrame-play"))
 
 lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
    .settings(
-      version := "1.0.3-scalaz-7.2.x",
+      version := "1.0.4-scalaz-7.2.x-SNAPSHOT",
+      publishTo := sonatypePublishTo.value,
+      sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
          case Some((2, scalaMajor)) if scalaMajor >= 13 =>
            Seq(
@@ -122,7 +128,6 @@ lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
          case x =>
            Seq()
       }),
-      pubishingSettings,
       libraryDependencies ++= Seq(
          "org.scalaz" %% "scalaz-core" % "[7.2,7.3[" % Provided,
          "org.scalatest" %% "scalatest" % "3.0.7" % Test,

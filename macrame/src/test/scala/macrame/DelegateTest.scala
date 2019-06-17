@@ -4,6 +4,8 @@ import org.scalatest.FunSuite
 
 import scala.language.implicitConversions
 
+import Helpers.suppressUnusedWarning
+
 class DelegateTest extends FunSuite {
 
    test("Delegating a top-level object should fail.") {
@@ -53,6 +55,9 @@ class DelegateTest extends FunSuite {
       class Bar1(@delegate foo : Foo)
       abstract class Bar2 { @delegate val foo : Foo }
       abstract class Bar3 { @delegate def foo : Foo }
+      suppressUnusedWarning[Bar1]
+      suppressUnusedWarning[Bar2]
+      suppressUnusedWarning[Bar3]
       assertCompiles("""
       val bar1 = (new Bar1(new Foo)).identity[Int](5)
       val bar2 = (new Bar2 { val foo = new Foo }).identity[Int](5)
@@ -78,7 +83,7 @@ class DelegateTest extends FunSuite {
 
       def extractUrls() : List[String] =
          for {
-            document ← display.toList
+            document <- display.toList
          } yield document
    }
 
@@ -98,21 +103,27 @@ class DelegateTest extends FunSuite {
 
    case class CaseOne(foo : String, bar : Int, baz : Long)
    test("Delegated parameters should not clobber copy methods.") {
-      case class CaseTwo(@delegate one : CaseOne, alpha : Boolean)
-      class NonCase(@delegate one : CaseOne, alpha : Boolean)
-      val a = CaseOne("a", 1, 2l)
-      val b = CaseOne("b", 3, 4l)
+      case class CaseTwo(@delegate one : CaseOne, alpha : Boolean) {
+         suppressUnusedWarning(alpha)
+      }
+      class NonCase(@delegate one : CaseOne, alpha : Boolean) {
+         suppressUnusedWarning(alpha)
+      }
+      val a = CaseOne("a", 1, 2L)
+      val b = CaseOne("b", 3, 4L)
       val c = CaseTwo(a, true)
       val d = CaseTwo(b, true)
       val n1 = new NonCase(a, true)
+      suppressUnusedWarning(n1)
       assert(c.copy(one = b) == d)
       assertTypeError("""n1.copy""")
    }
 
    test("Delegated members should not clobber copy methods.") {
       abstract class NonCase { @delegate val one : CaseOne; val alpha : Boolean }
-      val a = CaseOne("a", 1, 2l)
+      val a = CaseOne("a", 1, 2L)
       val n1 = new NonCase { val one = a; val alpha = true }
+      suppressUnusedWarning(n1)
       assertTypeError("""n1.copy()""")
    }
 
@@ -139,6 +150,8 @@ class DelegateTest extends FunSuite {
             headline : Option[String] = None) {
          private val foo : Int = 5
          private val baz : String = "five"
+         suppressUnusedWarning(foo)
+         suppressUnusedWarning(baz)
       }
       assertCompiles("""
       final case class PostContent(

@@ -1,5 +1,7 @@
 package macrame
 
+import scala.language.higherKinds
+
 sealed abstract class Ref[A]
 final case class Id[A](val key : Long) extends Ref[A]
 final case class Resolved[A](val a : A) extends Ref[A]

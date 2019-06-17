@@ -2,13 +2,16 @@ package macrame
 
 import org.scalatest.FunSuite
 
-import scala.language.implicitConversions
 import scala.math.Ordering
+
+import Helpers.suppressUnusedWarning
 
 class EnumTest extends FunSuite {
 
-   trait EnumExtension[A] { self : EnumApi[A] =>
-      def foo : A => String = a => asStringImpl(a)
+   val yellowStr : String = "YELLOW"
+
+   trait EnumExtension[E] { self : EnumApi[E] =>
+      def foo : E => String = e => asStringImpl(e)
    }
 
    test("Passing a non-String literal to a case should fail.") {
@@ -17,6 +20,7 @@ class EnumTest extends FunSuite {
 
    test("Passing a non-String value to a case should fail.") {
       val foo = 5
+      suppressUnusedWarning(foo)
       assertTypeError("""@enum class Color { Red(foo) }""")
    }
 
@@ -31,7 +35,6 @@ class EnumTest extends FunSuite {
    }
 
    test("Overriding the string representation should work.") {
-      val yellowStr = "YELLOW"
       @enum class Color {
          Red
          Blue("BLUE")
@@ -59,6 +62,7 @@ class EnumTest extends FunSuite {
          val asInt = asIntImpl _
          val fromInt = fromIntImpl _
       }
+      suppressUnusedWarning(Color)
       assert(Color.asInt(Color.Red) == 0)
       assert(Color.asInt(Color.Blue) == 1)
       assert(Color.asInt(Color.Yellow) == 2)
@@ -103,8 +107,6 @@ class EnumTest extends FunSuite {
       }
       assert(Color.name == "Color")
    }
-
-   val yellowStr = "YELLOW"
 
    @enum class TrafficColor {
       Red("RED")

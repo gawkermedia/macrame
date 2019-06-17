@@ -31,7 +31,7 @@ object enum {
          case _                   => c.abort(NoPosition, "Enum must be a class.")
       }
       val outputs = input match {
-         case ClassDef(mods, enumName, tparams, impl) =>
+         case ClassDef(mods @ _, enumName, tparams @ _, impl) =>
             impl.body.foreach {
                case Ident(_) =>
                case Apply(Ident(_), _ :: Nil) =>

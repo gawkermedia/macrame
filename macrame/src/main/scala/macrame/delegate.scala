@@ -12,7 +12,6 @@ object delegate {
 
    def impl(c : Context)(annottees : c.Expr[Any]*) : c.Expr[Any] = {
       import c.universe._
-      import Flag._
 
       val (delegate : Tree, container : Option[Tree], companion : Option[Tree]) = annottees match {
          case delegate :: clazz :: obj :: Nil => (delegate.tree, Some(clazz.tree), Some(obj.tree))
@@ -160,7 +159,7 @@ object delegate {
             val existingMembers = impl.body.flatMap {
                case DefDef(_, name, _, _, _, _) => List(name)
                case ValDef(_, name, _, _)       => List(name)
-               case t                           => Nil
+               case _                           => Nil
             }
             val containerType = c.typecheck(q"""(throw new java.lang.Exception("")) : Object with ..${impl.parents}""").tpe
             val delegatedMembers = delegateType.members.filter(s =>
@@ -174,7 +173,7 @@ object delegate {
                case method : MethodSymbol =>
                   val arguments = method.paramLists.map(_.map { p =>
                      val typeSignature = p.typeSignature match {
-                        case TypeRef(NoPrefix, t, Nil) =>
+                        case TypeRef(NoPrefix, _, Nil) =>
                            Ident(p.typeSignature.typeSymbol.name.toTypeName)
                         case _ => tq"${p.typeSignature}"
                      }
