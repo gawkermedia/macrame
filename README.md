@@ -45,7 +45,7 @@ To resolve this tension, `@enum` provides the *implementations* for automaticall
 }
 object Color {
    def asString(color : Color) = asStringImpl(color)
-   // Replicating Enumeration's partial String→Enumeration.Value conversion.
+   // Replicating Enumeration's partial String->Enumeration.Value conversion.
    def withName(s : String) = fromStringImpl(s)
       .getOrElse(throw new NoSuchElementException(s"No value found for '$s'"))
 }
