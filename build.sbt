@@ -7,6 +7,7 @@ inThisBuild(Seq(
 
    scalaVersion := "2.12.8",
    crossScalaVersions := Seq("2.13.0-M5", "2.12.8", "2.11.12"),
+
    scalacOptions ++= Seq(
       "-unchecked",                        // Show details of unchecked warnings.
       "-deprecation",                      // Show details of deprecation warnings.
@@ -35,19 +36,36 @@ inThisBuild(Seq(
       "-Ywarn-value-discard"               // Prevent accidental discarding of results in unit functions.
    ),
 
+   // Enable compiler checks added in Scala 2.12
    scalacOptions ++= (CrossVersion.partialVersion((scalaVersion in ThisProject).value) match {
-         case Some((2, scalaMajor)) if scalaMajor >= 12 =>
-           Seq(
-             "-Xlint:constant",                   // Evaluation of a constant arithmetic expression results in an error.
-             "-Ywarn-extra-implicit",             // Warn when more than one implicit parameter section is defined.
-             "-Ywarn-unused:implicits",           // Warn if an implicit parameter is unused.
-             "-Ywarn-unused:locals",              // Warn if a local definition is unused.
-             "-Ywarn-unused:params",              // Warn if a value parameter is unused.
-             "-Ywarn-unused:patvars",             // Warn if a variable bound in a pattern is unused.
-             "-Ywarn-unused:privates"             // Warn if a private member is unused.
-           )
-         case x =>
-           Seq()
+     case Some((2, scalaMajor)) if scalaMajor >= 12 =>
+       Seq(
+         "-Xlint:constant",                   // Evaluation of a constant arithmetic expression results in an error.
+         "-Ywarn-extra-implicit",             // Warn when more than one implicit parameter section is defined.
+         "-Ywarn-unused:implicits",           // Warn if an implicit parameter is unused.
+         "-Ywarn-unused:locals",              // Warn if a local definition is unused.
+         "-Ywarn-unused:params",              // Warn if a value parameter is unused.
+         "-Ywarn-unused:patvars",             // Warn if a variable bound in a pattern is unused.
+         "-Ywarn-unused:privates"             // Warn if a private member is unused.
+       )
+     case _ =>
+       Seq()
+   }),
+
+   // Use compiler support for macros for Scala 2.13, and macro-paradise plugin for pre-2.13
+   scalacOptions ++= (CrossVersion.partialVersion((scalaVersion in ThisProject).value) match {
+     case Some((2, scalaMajor)) if scalaMajor >= 13 =>
+       Seq(
+         "-Ymacro-annotations"
+       )
+     case _ =>
+       Seq()
+   }),
+   libraryDependencies ++= (CrossVersion.partialVersion((scalaVersion in ThisProject).value) match {
+     case Some((2, scalaMajor)) if scalaMajor >= 13 =>
+       Seq()
+     case _ =>
+       Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full))
    }),
 
    scalariformPreferences := scalariformPreferences.value
@@ -71,23 +89,9 @@ lazy val macrame = Project("macrame", file("macrame"))
       version := "1.2.10-SNAPSHOT",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
-      scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
-         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
-           Seq(
-             "-Ymacro-annotations"
-           )
-         case x =>
-           Seq()
-      }),
       libraryDependencies ++= Seq(
          "org.scala-lang" % "scala-compiler" % scalaVersion.value,
-         "org.scalatest" %% "scalatest" % "3.0.7" % Test),
-      libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
-         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
-           Seq()
-         case _ =>
-           Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full))
-      })
+         "org.scalatest" %% "scalatest" % "3.0.7" % Test)
    )
 
 lazy val macramePlay = Project("macrame-play", file("macrame-play"))
@@ -95,23 +99,9 @@ lazy val macramePlay = Project("macrame-play", file("macrame-play"))
       version := "1.1.4-play-2.7.x-SNAPSHOT",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
-      scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
-         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
-           Seq(
-             "-Ymacro-annotations"
-           )
-         case x =>
-           Seq()
-      }),
       libraryDependencies ++= Seq(
          "com.typesafe.play" %% "play" % "[2.7,2.8[" % Provided,
-         "org.scalatest" %% "scalatest" % "3.0.7" % Test),
-      libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
-         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
-           Seq()
-         case _ =>
-           Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full))
-      })
+         "org.scalatest" %% "scalatest" % "3.0.7" % Test)
    )
    .dependsOn(macrame)
 
@@ -120,23 +110,9 @@ lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
       version := "1.0.4-scalaz-7.2.x-SNAPSHOT",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
-      scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
-         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
-           Seq(
-             "-Ymacro-annotations"
-           )
-         case x =>
-           Seq()
-      }),
       libraryDependencies ++= Seq(
          "org.scalaz" %% "scalaz-core" % "[7.2,7.3[" % Provided,
          "org.scalatest" %% "scalatest" % "3.0.7" % Test,
-         "org.scalacheck" %% "scalacheck" % "1.14.0" % Test),
-      libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
-         case Some((2, scalaMajor)) if scalaMajor >= 13 =>
-           Seq()
-         case _ =>
-           Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full))
-      })
+         "org.scalacheck" %% "scalacheck" % "1.14.0" % Test)
    )
    .dependsOn(macrame)
