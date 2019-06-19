@@ -3,11 +3,11 @@ package macrame.scalaz.enums
 import macrame.enum
 
 import org.scalatest.FunSuite
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 import org.scalacheck.Gen
 
-class EnumTest extends FunSuite with PropertyChecks {
+class EnumTest extends FunSuite with ScalaCheckPropertyChecks {
    test("Equal instance should obey laws.") {
       @enum class Color {
          Red
