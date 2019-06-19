@@ -6,7 +6,7 @@ inThisBuild(Seq(
    organizationHomepage := Some(url("https://kinja.com/")),
 
    scalaVersion := "2.12.8",
-   crossScalaVersions := Seq("2.13.0-M5", "2.12.8", "2.11.12"),
+   crossScalaVersions := Seq("2.13.0", "2.12.8", "2.11.12"),
 
    scalacOptions ++= Seq(
       "-unchecked",                        // Show details of unchecked warnings.
@@ -91,7 +91,7 @@ lazy val macrame = Project("macrame", file("macrame"))
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
          "org.scala-lang" % "scala-compiler" % scalaVersion.value,
-         "org.scalatest" %% "scalatest" % "3.0.7" % Test)
+         "org.scalatest" %% "scalatest" % "3.0.8" % Test)
    )
 
 lazy val macramePlay = Project("macrame-play", file("macrame-play"))
@@ -101,7 +101,7 @@ lazy val macramePlay = Project("macrame-play", file("macrame-play"))
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
          "com.typesafe.play" %% "play" % "[2.7,2.8[" % Provided,
-         "org.scalatest" %% "scalatest" % "3.0.7" % Test)
+         "org.scalatest" %% "scalatest" % "3.0.8" % Test)
    )
    .dependsOn(macrame)
 
@@ -112,7 +112,7 @@ lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
          "org.scalaz" %% "scalaz-core" % "[7.2,7.3[" % Provided,
-         "org.scalatest" %% "scalatest" % "3.0.7" % Test,
+         "org.scalatest" %% "scalatest" % "3.0.8" % Test,
          "org.scalacheck" %% "scalacheck" % "1.14.0" % Test)
    )
    .dependsOn(macrame)
