@@ -86,7 +86,7 @@ lazy val root = Project("root", file("."))
 
 lazy val macrame = Project("macrame", file("macrame"))
    .settings(
-      version := "1.2.10-SNAPSHOT",
+      version := "1.2.10",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
@@ -96,7 +96,7 @@ lazy val macrame = Project("macrame", file("macrame"))
 
 lazy val macramePlay = Project("macrame-play", file("macrame-play"))
    .settings(
-      version := "1.1.4-play-2.7.x-SNAPSHOT",
+      version := "1.1.4-play-2.7.x",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
@@ -107,7 +107,7 @@ lazy val macramePlay = Project("macrame-play", file("macrame-play"))
 
 lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
    .settings(
-      version := "1.0.4-scalaz-7.2.x-SNAPSHOT",
+      version := "1.0.4-scalaz-7.2.x",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
