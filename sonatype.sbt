@@ -3,7 +3,7 @@ import xerial.sbt.Sonatype._
 sonatypeProfileName := "com.kinja"
 
 publishMavenStyle := true
-useGpg := true
+// useGpg := true
 
 Global / description := "Macrame provides macro-based replacements for parts of the Scala standard library."
 Global / homepage := Some(url("https://github.com/gawkermedia/macrame"))
