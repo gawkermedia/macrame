@@ -96,11 +96,11 @@ lazy val macrame = Project("macrame", file("macrame"))
 
 lazy val macramePlay = Project("macrame-play", file("macrame-play"))
    .settings(
-      version := "1.1.4-play-2.7.x",
+      version := "1.1.4-play-2.8.x",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
-         "com.typesafe.play" %% "play" % "[2.7,2.8[" % Provided,
+         "com.typesafe.play" %% "play" % "[2.8,2.9[" % Provided,
          "org.scalatest" %% "scalatest" % "3.0.8" % Test)
    )
    .dependsOn(macrame)

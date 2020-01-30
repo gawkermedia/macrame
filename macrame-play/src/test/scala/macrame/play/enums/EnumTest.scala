@@ -19,9 +19,9 @@ class EnumTest extends FunSuite {
       }
       object Color extends AsJson[Color]
 
-      assert(Json.toJson(Color.Red) == JsString("Red"))
-      assert(Json.toJson(Color.Blue) == JsString("BLUE"))
-      assert(Json.toJson(Color.Yellow) == JsString("YELLOW"))
+      assert(Json.toJson(Color.Red : Color) == JsString("Red"))
+      assert(Json.toJson(Color.Blue : Color) == JsString("BLUE"))
+      assert(Json.toJson(Color.Yellow : Color) == JsString("YELLOW"))
    }
 
    test("FromJson should work.") {
