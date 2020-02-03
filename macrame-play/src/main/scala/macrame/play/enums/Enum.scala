@@ -23,6 +23,9 @@ trait AsJson[E] { self : EnumApi[E] =>
    implicit val writes : Writes[E] = new Writes[E] {
       def writes(enum : E) : JsValue = JsString(asStringImpl(enum))
    }
+   implicit def enumValueWrites[V <: E] : Writes[V] = new Writes[V] {
+      def writes(value : V) : JsValue = JsString(asStringImpl(value))
+   }
 }
 
 /**
