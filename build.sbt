@@ -111,7 +111,7 @@ lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
-         "org.scalaz" %% "scalaz-core" % "[7.2,7.3[" % Provided,
+         "org.scalaz" %% "scalaz-core" % "[7.2,7.3)" % Provided,
          "org.scalatest" %% "scalatest" % "3.0.8" % Test,
          "org.scalacheck" %% "scalacheck" % "1.14.0" % Test)
    )
