@@ -6,7 +6,7 @@ inThisBuild(Seq(
    organizationHomepage := Some(url("https://kinja.com/")),
 
    scalaVersion := "2.12.8",
-   crossScalaVersions := Seq("2.13.1", "2.12.8"),
+   crossScalaVersions := Seq("2.13.5", "2.12.8"),
 
    scalacOptions ++= Seq(
       "-unchecked",                        // Show details of unchecked warnings.
@@ -37,7 +37,7 @@ inThisBuild(Seq(
    ),
 
    // Enable compiler checks added in Scala 2.12
-   scalacOptions ++= (CrossVersion.partialVersion((scalaVersion in ThisProject).value) match {
+   scalacOptions ++= (CrossVersion.partialVersion((ThisProject / scalaVersion).value) match {
      case Some((2, scalaMajor)) if scalaMajor >= 12 =>
        Seq(
          "-Xlint:constant",                   // Evaluation of a constant arithmetic expression results in an error.
@@ -53,7 +53,7 @@ inThisBuild(Seq(
    }),
 
    // Use compiler support for macros for Scala 2.13, and macro-paradise plugin for pre-2.13
-   scalacOptions ++= (CrossVersion.partialVersion((scalaVersion in ThisProject).value) match {
+   scalacOptions ++= (CrossVersion.partialVersion((ThisProject / scalaVersion).value) match {
      case Some((2, scalaMajor)) if scalaMajor >= 13 =>
        Seq(
          "-Ymacro-annotations"
@@ -61,7 +61,7 @@ inThisBuild(Seq(
      case _ =>
        Seq()
    }),
-   libraryDependencies ++= (CrossVersion.partialVersion((scalaVersion in ThisProject).value) match {
+   libraryDependencies ++= (CrossVersion.partialVersion((ThisProject / scalaVersion).value) match {
      case Some((2, scalaMajor)) if scalaMajor >= 13 =>
        Seq()
      case _ =>
@@ -86,7 +86,7 @@ lazy val root = Project("root", file("."))
 
 lazy val macrame = Project("macrame", file("macrame"))
    .settings(
-      version := "1.2.10",
+      version := "1.2.11",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
@@ -96,18 +96,18 @@ lazy val macrame = Project("macrame", file("macrame"))
 
 lazy val macramePlay = Project("macrame-play", file("macrame-play"))
    .settings(
-      version := "1.1.4-play-2.8.x",
+      version := "1.1.5-play-2.8.x",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
-         "com.typesafe.play" %% "play" % "2.8.1" % Provided,
+         "com.typesafe.play" %% "play" % "2.8.8" % Provided,
          "org.scalatest" %% "scalatest" % "3.0.8" % Test)
    )
    .dependsOn(macrame)
 
 lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
    .settings(
-      version := "1.0.4-scalaz-7.2.x",
+      version := "1.0.5-scalaz-7.2.x",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
