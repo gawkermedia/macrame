@@ -5,8 +5,8 @@ inThisBuild(Seq(
    organizationName := "Kinja",
    organizationHomepage := Some(url("https://kinja.com/")),
 
-   scalaVersion := "2.12.8",
-   crossScalaVersions := Seq("2.13.6", "2.12.8"),
+   scalaVersion := "2.12.15",
+   crossScalaVersions := Seq("2.13.7", "2.12.15"),
 
    scalacOptions ++= Seq(
       "-unchecked",                        // Show details of unchecked warnings.
@@ -22,7 +22,6 @@ inThisBuild(Seq(
       "-Xlint:inaccessible",               // Warn about inaccessible types in method signatures.
       "-Xlint:infer-any",                  // Warn when a type argument is inferred to be `Any`.
       "-Xlint:missing-interpolator",       // A string literal appears to be missing an interpolator id.
-      "-Xlint:nullary-override",           // Warn when non-nullary `def f()' overrides nullary `def f'.
       "-Xlint:nullary-unit",               // Warn when nullary methods return Unit.
       "-Xlint:option-implicit",            // Option.apply used implicit view.
       "-Xlint:package-object-classes",     // Class or object defined in package object.
@@ -65,7 +64,7 @@ inThisBuild(Seq(
      case Some((2, scalaMajor)) if scalaMajor >= 13 =>
        Seq()
      case _ =>
-       Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full))
+       Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full))
    }),
 
    scalariformPreferences := scalariformPreferences.value
