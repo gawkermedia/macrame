@@ -6,14 +6,14 @@ If you're using SBT, add the following to your build file.
 
 ##### Scala 2.13
 ```scala
-libraryDependencies += "com.kinja" %% "macrame" % "1.2.11"
+libraryDependencies += "com.kinja" %% "macrame" % "1.2.12"
 scalacOptions += "-Ymacro-annotations"
 ```
 
 ##### Scala 2.12.x and 2.11.x: 
 ```scala
 libraryDependencies ++= Seq(
-   "com.kinja" %% "macrame" % "1.2.11",
+   "com.kinja" %% "macrame" % "1.2.12",
    compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full))
 ```
 
