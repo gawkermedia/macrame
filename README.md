@@ -6,7 +6,7 @@ If you're using SBT, add the following to your build file.
 
 ##### Scala 2.13
 ```scala
-libraryDependencies += "com.kinja" %% "macrame" % "1.2.12"
+libraryDependencies += "com.kinja" %% "macrame" % "1.2.13"
 scalacOptions += "-Ymacro-annotations"
 ```
 
