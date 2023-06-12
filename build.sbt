@@ -6,7 +6,7 @@ inThisBuild(Seq(
    organizationHomepage := Some(url("https://kinja.com/")),
 
    scalaVersion := "2.12.15",
-   crossScalaVersions := Seq("2.13.10", "2.12.15"),
+   crossScalaVersions := Seq("2.13.11", "2.12.15"),
 
    scalacOptions ++= Seq(
       "-unchecked",                        // Show details of unchecked warnings.
