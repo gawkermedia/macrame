@@ -90,7 +90,7 @@ lazy val macrame = project.in(file("macrame"))
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
          "org.scala-lang" % "scala-compiler" % scalaVersion.value,
-         "org.scalatest" %% "scalatest" % "3.2.15" % Test)
+         "org.scalatest" %% "scalatest" % "3.0.8" % Test)
    )
 
 lazy val macramePlay = Project("macrame-play", file("macrame-play"))
@@ -100,7 +100,7 @@ lazy val macramePlay = Project("macrame-play", file("macrame-play"))
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
          "com.typesafe.play" %% "play" % "2.8.19" % Provided,
-         "org.scalatest" %% "scalatest" % "3.2.15" % Test)
+         "org.scalatest" %% "scalatest" % "3.0.8" % Test)
    )
    .dependsOn(macrame)
 
@@ -111,7 +111,7 @@ lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
          "org.scalaz" %% "scalaz-core" % "7.3.7" % Provided,
-         "org.scalatest" %% "scalatest" % "3.2.15" % Test,
-         "org.scalacheck" %% "scalacheck" % "1.17.0" % Test)
+         "org.scalatest" %% "scalatest" % "3.0.8" % Test,
+         "org.scalacheck" %% "scalacheck" % "1.14.0" % Test)
    )
    .dependsOn(macrame)
