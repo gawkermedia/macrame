@@ -6,7 +6,7 @@ inThisBuild(Seq(
    organizationHomepage := Some(url("https://kinja.com/")),
 
    scalaVersion := "2.12.15",
-   crossScalaVersions := Seq("2.13.7", "2.12.15"),
+   crossScalaVersions := Seq("2.13.11", "2.12.18"),
 
    scalacOptions ++= Seq(
       "-unchecked",                        // Show details of unchecked warnings.
@@ -76,16 +76,16 @@ inThisBuild(Seq(
       .setPreference(AlignSingleLineCaseStatements, true)
 ))
 
-lazy val root = Project("root", file("."))
+lazy val root = project.in(file("."))
    .settings(
       publishArtifact := false,
       publish / skip := true
    )
    .aggregate(macrame, macramePlay, macrameScalaz)
 
-lazy val macrame = Project("macrame", file("macrame"))
+lazy val macrame = project.in(file("macrame"))
    .settings(
-      version := "1.2.12",
+      version := "1.2.13",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
@@ -95,22 +95,22 @@ lazy val macrame = Project("macrame", file("macrame"))
 
 lazy val macramePlay = Project("macrame-play", file("macrame-play"))
    .settings(
-      version := "1.1.6-play-2.8.x",
+      version := "1.1.7-play-2.8.x",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
-         "com.typesafe.play" %% "play" % "2.8.8" % Provided,
+         "com.typesafe.play" %% "play" % "2.8.19" % Provided,
          "org.scalatest" %% "scalatest" % "3.0.8" % Test)
    )
    .dependsOn(macrame)
 
 lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
    .settings(
-      version := "1.0.6-scalaz-7.2.x",
+      version := "1.0.7-scalaz-7.2.x",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
-         "org.scalaz" %% "scalaz-core" % "[7.2,7.3)" % Provided,
+         "org.scalaz" %% "scalaz-core" % "7.3.7" % Provided,
          "org.scalatest" %% "scalatest" % "3.0.8" % Test,
          "org.scalacheck" %% "scalacheck" % "1.14.0" % Test)
    )
