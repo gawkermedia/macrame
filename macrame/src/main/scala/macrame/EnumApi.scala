@@ -12,7 +12,7 @@ import scala.math.Ordering
  */
 trait EnumApi[E] {
    /** Returns a string representation of the enum. */
-   protected def asStringImpl(enum : E) : String
+   protected def asStringImpl(`enum` : E) : String
 
    /** Returns the case whose String representation matches, if there is one. */
    protected def fromStringImpl(str : String) : Option[E]
@@ -21,7 +21,7 @@ trait EnumApi[E] {
     * Returns a Short representation of the enum.
     * The first listed case is 1, the second 2, and so on.
     */
-   protected def asShortImpl(enum : E) : Short = asIntImpl(enum).toShort
+   protected def asShortImpl(`enum` : E) : Short = asIntImpl(enum).toShort
 
    /** Returns the case whose Short representation matches, if there is one. */
    protected def fromShortImpl(short : Short) : Option[E] = fromIntImpl(short.toInt)
@@ -30,7 +30,7 @@ trait EnumApi[E] {
     * Returns an Int representation of the enum.
     * The first listed case is 1, the second 2, and so on.
     */
-   protected def asIntImpl(enum : E) : Int
+   protected def asIntImpl(`enum` : E) : Int
 
    /** Returns the case whose Int representation matches, if there is one. */
    protected def fromIntImpl(int : Int) : Option[E]
@@ -39,25 +39,25 @@ trait EnumApi[E] {
     * Returns a Long representation of the enum.
     * The first listed case is 1, the second 2, and so on.
     */
-   protected def asLongImpl(enum : E) : Long = asIntImpl(enum).toLong
+   protected def asLongImpl(`enum` : E) : Long = asIntImpl(enum).toLong
 
    /** Returns the case whose Long representation matches, if there is one. */
    protected def fromLongImpl(long : Long) : Option[E] = fromIntImpl(long.toInt)
 
    /** Returns the case defined just after the given enum, if one exists. */
-   protected def nextImpl(enum : E) : Option[E] =
+   protected def nextImpl(`enum` : E) : Option[E] =
       fromIntImpl(asIntImpl(enum) + 1)
 
    /** As `nextImpl` but modular: the last defined case wraps around to the first one. */
-   protected def nextModImpl(enum : E) : E =
+   protected def nextModImpl(`enum` : E) : E =
       nextImpl(enum) getOrElse firstImpl
 
    /** Returns the case defined just before the given enum, if one exists. */
-   protected def prevImpl(enum : E) : Option[E] =
+   protected def prevImpl(`enum` : E) : Option[E] =
       fromIntImpl(asIntImpl(enum) - 1)
 
    /** As `prevImpl` but modular: the first defined case wraps around to the last one. */
-   protected def prevModImpl(enum : E) : E =
+   protected def prevModImpl(`enum` : E) : E =
       prevImpl(enum) getOrElse lastImpl
 
    /** The first case defined in the enum. */

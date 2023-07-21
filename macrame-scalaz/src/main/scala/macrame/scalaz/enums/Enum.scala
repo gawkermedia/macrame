@@ -40,7 +40,7 @@ trait IsOrder[E] { self : EnumApi[E] =>
 }
 
 trait IsEnum[E] { self : EnumApi[E] =>
-   implicit val enum : Enum[E] = new Enum[E] {
+   implicit val `enum` : Enum[E] = new Enum[E] {
       override def equal(x : E, y : E) : Boolean = x == y
       def order(x : E, y : E) : Ordering =
          if (x == y)
