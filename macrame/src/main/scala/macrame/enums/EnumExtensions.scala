@@ -20,8 +20,8 @@ import macrame.EnumApi
  * }}}
  */
 trait AsString[E] { self : EnumApi[E] =>
-   @inline def asString(enum : E) : String = asStringImpl(enum)
-   implicit class AsStringOps(enum : E) {
+   @inline def asString(`enum` : E) : String = asStringImpl(enum)
+   implicit class AsStringOps(`enum` : E) {
       @inline def asString : String = self.asString(enum)
    }
 }
@@ -78,8 +78,8 @@ trait StringConverters[E] extends AsString[E] with FromString[E] { self : EnumAp
  * }}}
  */
 trait AsInt[E] { self : EnumApi[E] =>
-   @inline def asInt(enum : E) : Int = asIntImpl(enum)
-   implicit class AsIntOps(enum : E) {
+   @inline def asInt(`enum` : E) : Int = asIntImpl(enum)
+   implicit class AsIntOps(`enum` : E) {
       @inline def asInt : Int = self.asInt(enum)
    }
 }
@@ -136,8 +136,8 @@ trait IntConverters[E] extends AsInt[E] with FromInt[E] { self : EnumApi[E] => }
  * }}}
  */
 trait AsShort[E] { self : EnumApi[E] =>
-   @inline def asShort(enum : E) : Short = asShortImpl(enum)
-   implicit class AsShortOps(enum : E) {
+   @inline def asShort(`enum` : E) : Short = asShortImpl(enum)
+   implicit class AsShortOps(`enum` : E) {
       @inline def asShort : Short = self.asShort(enum)
    }
 }
@@ -194,8 +194,8 @@ trait ShortConverters[E] extends AsShort[E] with FromShort[E] { self : EnumApi[E
  * }}}
  */
 trait AsLong[E] { self : EnumApi[E] =>
-   @inline def asLong(enum : E) : Long = asLongImpl(enum)
-   implicit class AsLongOps(enum : E) {
+   @inline def asLong(`enum` : E) : Long = asLongImpl(enum)
+   implicit class AsLongOps(`enum` : E) {
       @inline def asLong : Long = self.asLong(enum)
    }
 }
@@ -272,11 +272,11 @@ trait NumericConverters[E] extends LongConverters[E] with ShortConverters[E] wit
  */
 trait Ordered[E] { self : EnumApi[E] =>
    @inline implicit val ordering : Ordering[E] = orderingImpl
-   @inline def next(enum : E) : Option[E] = nextImpl(enum)
-   @inline def prev(enum : E) : Option[E] = prevImpl(enum)
+   @inline def next(`enum` : E) : Option[E] = nextImpl(enum)
+   @inline def prev(`enum` : E) : Option[E] = prevImpl(enum)
    @inline def first : E = firstImpl
    @inline def last : E = lastImpl
-   implicit class OrderedOps(enum : E) {
+   implicit class OrderedOps(`enum` : E) {
       @inline def next : Option[E] = self.next(enum)
       @inline def prev : Option[E] = self.prev(enum)
       @inline def <(other : E) = ordering.lt(enum, other)
@@ -307,9 +307,9 @@ trait Ordered[E] { self : EnumApi[E] =>
  * }}}
  */
 trait OrderedModular[E] extends Ordered[E] { self : EnumApi[E] =>
-   @inline def nextMod(enum : E) : E = nextModImpl(enum)
-   @inline def prevMod(enum : E) : E = prevModImpl(enum)
-   implicit class OrderedModularOps(enum : E) {
+   @inline def nextMod(`enum` : E) : E = nextModImpl(enum)
+   @inline def prevMod(`enum` : E) : E = prevModImpl(enum)
+   implicit class OrderedModularOps(`enum` : E) {
       @inline def nextMod : E = self.nextMod(enum)
       @inline def prevMod : E = self.prevMod(enum)
    }

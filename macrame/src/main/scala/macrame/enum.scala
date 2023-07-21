@@ -6,11 +6,11 @@ import scala.reflect.macros.whitebox.Context
 import scala.language.experimental.macros
 import scala.annotation.StaticAnnotation
 
-class enum extends StaticAnnotation {
+class `enum` extends StaticAnnotation {
    def macroTransform(annottees : Any*) : Any = macro enum.impl
 }
 
-object enum {
+object `enum` {
 
    def impl(c : Context)(annottees : c.Expr[Any]*) : c.Expr[Any] = {
       import c.universe._
