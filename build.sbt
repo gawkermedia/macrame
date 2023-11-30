@@ -5,8 +5,8 @@ inThisBuild(Seq(
    organizationName := "Kinja",
    organizationHomepage := Some(url("https://kinja.com/")),
 
-   scalaVersion := "2.12.18",
-   crossScalaVersions := Seq("2.13.11", "2.12.18"),
+   crossScalaVersions := Seq("2.13.12"),
+   scalaVersion := crossScalaVersions.value.head,
 
    scalacOptions ++= Seq(
       "-unchecked",                        // Show details of unchecked warnings.
@@ -32,24 +32,15 @@ inThisBuild(Seq(
       "-Ywarn-dead-code",                  // Fail when dead code is present. Prevents accidentally unreachable code.
       "-Ywarn-dead-code",                  // Fail when dead code is present. Prevents accidentally unreachable code.
       "-Ywarn-numeric-widen",              // Warn when numerics are widened.
-      "-Ywarn-value-discard"               // Prevent accidental discarding of results in unit functions.
+      "-Ywarn-value-discard",              // Prevent accidental discarding of results in unit functions.
+      "-Xlint:constant",                   // Evaluation of a constant arithmetic expression results in an error.
+      "-Ywarn-extra-implicit",             // Warn when more than one implicit parameter section is defined.
+      "-Ywarn-unused:implicits",           // Warn if an implicit parameter is unused.
+      "-Ywarn-unused:locals",              // Warn if a local definition is unused.
+      "-Ywarn-unused:params",              // Warn if a value parameter is unused.
+      "-Ywarn-unused:patvars",             // Warn if a variable bound in a pattern is unused.
+      "-Ywarn-unused:privates"             // Warn if a private member is unused.
    ),
-
-   // Enable compiler checks added in Scala 2.12
-   scalacOptions ++= (CrossVersion.partialVersion((ThisProject / scalaVersion).value) match {
-     case Some((2, scalaMajor)) if scalaMajor >= 12 =>
-       Seq(
-         "-Xlint:constant",                   // Evaluation of a constant arithmetic expression results in an error.
-         "-Ywarn-extra-implicit",             // Warn when more than one implicit parameter section is defined.
-         "-Ywarn-unused:implicits",           // Warn if an implicit parameter is unused.
-         "-Ywarn-unused:locals",              // Warn if a local definition is unused.
-         "-Ywarn-unused:params",              // Warn if a value parameter is unused.
-         "-Ywarn-unused:patvars",             // Warn if a variable bound in a pattern is unused.
-         "-Ywarn-unused:privates"             // Warn if a private member is unused.
-       )
-     case _ =>
-       Seq()
-   }),
 
    // Use compiler support for macros for Scala 2.13, and macro-paradise plugin for pre-2.13
    scalacOptions ++= (CrossVersion.partialVersion((ThisProject / scalaVersion).value) match {
@@ -81,11 +72,11 @@ lazy val root = project.in(file("."))
       publishArtifact := false,
       publish / skip := true
    )
-   .aggregate(macrame, macramePlay, macrameScalaz)
+   .aggregate(macrame, macramePlay)
 
 lazy val macrame = project.in(file("macrame"))
    .settings(
-      version := "1.2.14",
+      version := "2.0.0",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
@@ -95,23 +86,11 @@ lazy val macrame = project.in(file("macrame"))
 
 lazy val macramePlay = Project("macrame-play", file("macrame-play"))
    .settings(
-      version := "1.1.8-play-2.8.x",
+      version := "2.0.0-play-2.9.x",
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
-         "com.typesafe.play" %% "play" % "2.8.20" % Provided,
+         "com.typesafe.play" %% "play" % "2.9.0" % Provided,
          "org.scalatest" %% "scalatest" % "3.0.8" % Test)
-   )
-   .dependsOn(macrame)
-
-lazy val macrameScalaz = Project("macrame-scalaz", file("macrame-scalaz"))
-   .settings(
-      version := "1.0.8-scalaz-7.2.x",
-      publishTo := sonatypePublishTo.value,
-      sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
-      libraryDependencies ++= Seq(
-         "org.scalaz" %% "scalaz-core" % "7.3.7" % Provided,
-         "org.scalatest" %% "scalatest" % "3.0.8" % Test,
-         "org.scalacheck" %% "scalacheck" % "1.14.0" % Test)
    )
    .dependsOn(macrame)

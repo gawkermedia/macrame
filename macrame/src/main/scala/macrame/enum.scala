@@ -25,7 +25,7 @@ object `enum` {
          }
       }
 
-      val (input : Tree, companion : Option[Tree]) = annottees match {
+      val (input, companion) = annottees match {
          case clazz :: obj :: Nil => (clazz.tree, Some(obj.tree))
          case clazz :: Nil        => (clazz.tree, None)
          case _                   => c.abort(NoPosition, "Enum must be a class.")
@@ -42,6 +42,7 @@ object `enum` {
             }
             val init = impl.body.find {
                case DefDef(_, name, _, _, _, _) if name.decodedName.toString == "<init>" => true
+               case _ => false
             }.get
 
             val cases : List[Case] = impl.body.collect {
@@ -134,7 +135,7 @@ object `enum` {
                         newParents,
                         objImpl.self,
                         caseObjects ++ apiImpl ++ objImpl.body))
-               case None =>
+               case _ =>
                   val newParents = enumApi :: (impl.parents.filter {
                      case Select(Ident(scala), anyRef) if scala.toString == "scala" && anyRef.toString == "AnyRef" => false
                      case _ => true
