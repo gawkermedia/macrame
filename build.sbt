@@ -5,7 +5,7 @@ inThisBuild(Seq(
    organizationName := "Kinja",
    organizationHomepage := Some(url("https://kinja.com/")),
 
-   crossScalaVersions := Seq("2.13.12"),
+   crossScalaVersions := Seq("2.13.13"),
    scalaVersion := crossScalaVersions.value.head,
 
    scalacOptions ++= Seq(
@@ -42,21 +42,7 @@ inThisBuild(Seq(
       "-Ywarn-unused:privates"             // Warn if a private member is unused.
    ),
 
-   // Use compiler support for macros for Scala 2.13, and macro-paradise plugin for pre-2.13
-   scalacOptions ++= (CrossVersion.partialVersion((ThisProject / scalaVersion).value) match {
-     case Some((2, scalaMajor)) if scalaMajor >= 13 =>
-       Seq(
-         "-Ymacro-annotations"
-       )
-     case _ =>
-       Seq()
-   }),
-   libraryDependencies ++= (CrossVersion.partialVersion((ThisProject / scalaVersion).value) match {
-     case Some((2, scalaMajor)) if scalaMajor >= 13 =>
-       Seq()
-     case _ =>
-       Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full))
-   }),
+   scalacOptions ++= Seq("-Ymacro-annotations"),
 
    scalariformPreferences := scalariformPreferences.value
       .setPreference(IndentSpaces, 3)
@@ -90,7 +76,7 @@ lazy val macramePlay = Project("macrame-play", file("macrame-play"))
       publishTo := sonatypePublishTo.value,
       sonatypeProjectHosting := (Global / sonatypeProjectHosting).value,
       libraryDependencies ++= Seq(
-         "com.typesafe.play" %% "play" % "2.9.0" % Provided,
+         "com.typesafe.play" %% "play" % "2.9.2" % Provided,
          "org.scalatest" %% "scalatest" % "3.0.8" % Test)
    )
    .dependsOn(macrame)
