@@ -18,7 +18,8 @@ project/plugins/project/
 .worksheet
 .bloop
 .metals
+metals.sbt
 
-# Idea specific
+# IDE specific
 .idea
-
+.vscode

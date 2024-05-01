@@ -23,7 +23,7 @@ package object internal {
     * @param c The context to create the expression in.
     * @param expressions The expressions to be converted into one.
     */
-   def sequenceExpr[T : c.WeakTypeTag](c : Context)(expressions : Iterable[c.Expr[T]]) : c.Expr[List[T]] = {
+   def sequenceExpr[T](c : Context)(expressions : Iterable[c.Expr[T]]) : c.Expr[List[T]] = {
       import c.universe._
       c.Expr[List[T]](
          Apply(

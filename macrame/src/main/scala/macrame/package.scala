@@ -18,10 +18,6 @@ package object macrame {
     */
    def memberMap[F](obj : Object) : Map[String, F] = macro Impl.memberMap[F]
 
-   implicit class RegexStringContext(sc : StringContext) {
-      def r(args : Any*) : scala.util.matching.Regex = macro Impl.regex
-   }
-
    private object Impl {
 
       def trace[A](c : Context)(a : c.Expr[A]) : c.Expr[A] = {
@@ -31,53 +27,6 @@ package object macrame {
             "trace output\n   " + show(a.tree) + "\nfor position:\n",
             true)
          a
-      }
-
-      def regex(c : Context)(args : c.Expr[Any]*) : c.Expr[scala.util.matching.Regex] = {
-         import c.universe._
-
-         val s = c.prefix.tree match {
-            case Apply(_, List(Apply(_, rawParts))) => rawParts
-            case x                                  => c.abort(c.enclosingPosition, "unexpected tree: " + show(x))
-         }
-
-         val parts = s map {
-            case Literal(Constant(const : String)) => const
-         }
-
-         def getPoint(msg : String) : Int =
-            msg.split("\n")(2).indexOf('^')
-
-         try {
-            val emptyString : Tree = Literal(Constant(""))
-
-            val placeHolders = List.fill(args.length)(
-               java.util.regex.Pattern.quote("placeholder"))
-
-            // Check if the regex is valid.
-            try {
-               val regex = parts.zipAll(placeHolders, "", "").foldLeft("") {
-                  case (a, (b, c)) => a + b + c
-               }
-               regex.r
-            } catch {
-               case e : java.util.regex.PatternSyntaxException =>
-                  val pos = s.head.pos.withPoint(getPoint(e.getMessage) + s.head.pos.point)
-                  c.abort(pos, "Invalid Regex: " + e.getMessage.split("\n").head)
-            }
-
-            val mixed : List[(Tree, Tree)] = s.zipAll(
-               args.map(p => q"java.util.regex.Pattern.quote(${p.tree})"),
-               emptyString,
-               emptyString)
-            val regexString = mixed.foldLeft(emptyString) {
-               case (a, (b, c)) => q"$a + $b + $c"
-            }
-            c.Expr[scala.util.matching.Regex](q"""($regexString).r""")
-         } catch {
-            case e : Throwable =>
-               c.abort(c.prefix.tree.pos, e.getMessage)
-         }
       }
 
       def members[T : c.WeakTypeTag](c : Context)(obj : c.Expr[Object]) : c.Expr[List[T]] =
